@@ -1,0 +1,152 @@
+Siendo D un conjunto inductivo del tipo algebraico Dungeon:
+Definicion de D:
+Reglas base:
+    - Habitacion a está en D
+Reglas inductivas:
+    - Si a está en D, entonces (Pasaje x a) está en D
+    - Si b está en D y c está en d, entonces (Bifurcacion x b c) está en D
+
+f :: Dungeon a -> b
+f (Habitacion x)          = ...
+f (Pasaje x d)            = ... x ... f d ...
+f (Bifurcacion x d1 d2)   = ... x ... f d1 ... f  d2 ...
+
+cantidadDeBifurcacicones :: Dungeon a -> Int
+cantidadDeBifurcacicones (Habitacion x)          = 0
+cantidadDeBifurcacicones (Pasaje x d)            = 0 + cantidadDeBifurcacicones d 
+cantidadDeBifurcacicones (Bifurcacion x d1 d2)   = 1 + cantidadDeBifurcacicones d1 + cantidadDeBifurcacicones d2
+
+cantidadDePuntosInteresantes :: Dungeon a -> Int
+cantidadDePuntosInteresantes (Habitacion x)          = 1
+cantidadDePuntosInteresantes (Pasaje x d)            = unoSiTieneObjeto x + cantidadDePuntosInteresantes d
+cantidadDePuntosInteresantes (Bifurcacion x d1 d2)   = unoSiTieneObjeto x + cantidadDePuntosInteresantes d1 + cantidadDePuntosInteresantes d2
+
+unoSiTieneObjeto :: Maybe a -> Int
+unoSiTieneObjeto (Just o) = 1
+unoSiTieneObjeto _        = 0
+
+unoSiNoTieneObjeto :: Maybe a -> Int
+unoSiNoTieneObjeto Nothing = 1
+unoSiNoTieneObjeto _       = 0
+
+cantidadDePuntosVacios :: Dungeon a -> Int
+cantidadDePuntosVacios (Habitacion x)          = 0
+cantidadDePuntosVacios (Pasaje x d)            = unoSiNoTieneObjeto x + cantidadDePuntosVacios d
+cantidadDePuntosVacios (Bifurcacion x d1 d2)   = unoSiNoTieneObjeto x + cantidadDePuntosVacios d1 + cantidadDePuntosVacios d2
+
+cantidadDePuntosCon :: a-> Dungeon a -> b
+cantidadDePuntosCon e (Habitacion o)          = unoSiEsObjeto o e
+cantidadDePuntosCon e (Pasaje o d)            = unoSiHayObjetoYSonIguales o e + cantidadDePuntosCon e d
+cantidadDePuntosCon e (Bifurcacion o d1 d2)   = unoSiHayObjetoYSonIguales o e + cantidadDePuntosCon e d1 + cantidadDePuntosCon e d2
+
+unoSiEsObjeto:: a -> a -> Int
+unoSiEsObjeto o1 o2 = if(o1 == o2) then 1 else 0
+
+unoSiHayObjetoYSonIguales :: a -> Maybe a -> Int
+unoSiHayObjetoYSonIguales o1 (Just o2) = unoSiEsObjeto o1 o2
+unoSiHayObjetoYSonIguales _ _          = 0
+
+esLineal :: Dungeon a -> Bool
+esLineal (Habitacion x)          = True
+esLineal (Pasaje x d)            = True && esLineal d 
+esLineal (Bifurcacion x d1 d2)   = False && esLineal d1 && esLineal d2
+
+llenoDe :: a -> Dungeon a -> Bool
+llenoDe e (Habitacion x)          = e == x 
+llenoDe e (Pasaje x d)            = sonIgualesSiHayObjeto e x && llenoDe e d 
+llenoDe e (Bifurcacion x d1 d2)   = sonIgualesSiHayObjeto e x && llenoDe e d1 && llenoDe e d2
+
+sonIgualesSiHayObjeto :: a -> Maybe a -> Bool
+sonIgualesSiHayObjeto o1 (Just 2) = o1 == o2
+sonIgualesSiHayObjeto _ _         = False
+
+4)
+
+a)
+
+Prop.: ¿cantidadDePuntosVacios (Habitacion x) = 0?
+Dem.:  Sea o un elemento cualquiera del tipo a,
+    ¿cantidadDePuntosVacios (Habitacion o) = 0?
+    
+    LI:
+    cantidadDePuntosVacios (Habitacion o)
+    =
+    0
+
+    LD:
+    0
+
+    Se llega al mismo resultado en ambas partes, por lo tanto, se cumple la propiedad
+
+b)
+
+Prop.: ¿cantidadDePuntosVacios (Pasaje Nothing (Habitacion Joyas)) = 1?
+Dem.: 
+    LI:
+    cantidadDePuntosVacios (Pasaje Nothing (Habitacion Joyas))
+    =
+    unoSiNoTieneObjeto Nothing + cantidadDePuntosVacios (Habitacion Joyas)
+    =
+    1 + cantidadDePuntosVacios (Habitacion Joyas)
+    =
+    1 + 0
+    =
+    1
+    
+    LD:
+    1
+
+    Se llega al mismo resultado en ambas partes, por lo tanto, se cumple la propiedad
+
+c)
+Prop.: ¿cantidadDePuntosVacios (Pasaje (Just y) (Habitacion x)) = 0?
+Dem.:  Sean n y m elementos cualquiera del tipo a. 
+       ¿cantidadDePuntosVacios (Pasaje (Just n) (Habitacion m)) = 0?
+    
+    LI:
+    cantidadDePuntosVacios (Pasaje (Just n) (Habitacion m))
+    =
+    unoSiNoTieneObjeto (Just n) + cantidadDePuntosVacios (Habitacion m)
+    =
+    0 + cantidadDePuntosVacios (Habitacion m)
+    =
+    0 + 0
+    =
+    0
+
+    LD:
+    0
+
+    Se llega al mismo resultado en ambas partes, por lo tanto, se cumple la propiedad
+
+d)
+Prop.: ¿cantidadDePuntosVacios 
+            (Bifurcacion Nothing 
+                (Pasaje Nothing 
+                    (Habitacion Joyas)
+                ) 
+                (Pasaje (Just Oro) 
+                    (Habitacion Cofre)
+                )
+            ) 
+        
+        = 
+        
+        2?
+Dem.:  
+    
+    LI:
+    cantidadDePuntosVacios (Pasaje (Just n) (Habitacion m))
+    =
+    unoSiNoTieneObjeto (Just n) + cantidadDePuntosVacios (Habitacion m)
+    =
+    0 + cantidadDePuntosVacios (Habitacion m)
+    =
+    0 + 0
+    =
+    0
+
+    LD:
+    0
+
+    Se llega al mismo resultado en ambas partes, por lo tanto, se cumple la propiedad

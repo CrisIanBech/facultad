@@ -1,0 +1,276 @@
+1)
+
+a) 
+length :: [a] -> Int
+length [] = 0
+length (x:xs) = 1 + length xs
+
+sum : [Int] -> Int
+sum [] = 0
+sum (x:xs) = x + sum xs
+
+product : [Int] -> Int
+product [] = 1
+product (x:xs) = x * sum xs
+
+concat :: [[a]] -> [a]
+concat [] = []
+concat (x:xs) = x ++ concat xs
+
+elem :: Eq a => a -> [a] -> Bool
+elem a [] = False
+elem a (x:xs) = x == a || elem a xs
+
+all :: (a -> Bool) -> [a] -> Bool
+all f [] = True
+all f (x:xs) = f x && all f xs
+
+any :: (a -> Bool) -> [a] -> Bool
+any f [] = False
+any f (x:xs) = f x || any f xs
+
+count :: (a -> Bool) -> [a] -> Int
+count f [] = 0
+count f (x:xs) = unoSiCeroSino (f x) + count f xs
+
+unoSiCeroSino:: Bool -> Int
+unoSiCeroSino True = 1
+unoSiCeroSino False = 0
+
+subset :: Eq a => [a] -> [a] -> Bool
+subset [] _ = True
+subset (x:xs) [] = False
+subset (x:xs) ys = elem x ys && subset xs ys
+
+(++) :: [a] -> [a] -> [a]
+(++) [] ys = ys
+(++) (x:xs) ys = x : (++) xs ys
+
+reverse :: [a] -> [a]
+reverse [] = []
+reverse (x:xs) = alFinalLista x reverse xs
+
+alFinallista :: a -> [a] -> [a]
+alFinalLista x [] = x
+alFinalLista x (y:ys) = y : alFinalLista x ys
+
+// Prec, las listas deben de tener el mismo largo
+zip :: [a] -> [b] -> [(a, b)]
+zip xs [] = []
+zip [] ys = []
+zip (x:xs) (y:ys) = (x, y) : zip xs ys
+
+unzip :: [(a, b)] -> ([a], [b])
+unzip xs [] = (xs, [])
+unzip [] ys = ([], ys)
+unzip (x:xs) (y:ys) = let (xs', ys') = unzip xs ys
+                        in (x:xs', y:ys')
+
+2)
+
+    a)
+    para todo xs. para todo ys.
+    Prop.: ¿length (xs ++ ys) = length xs + length ys?
+    Dem.: Sean zs y ws listas cualesquiera (finitas y totalmente definidas)
+        Por ppio. de ind. en la estructura de zs, es equivalente demostrar que:
+
+
+    Caso base, zs = [])
+            ¿len ([] ++ ws) = len [] + len ws?
+
+    Caso ind., zs = x:xs')
+        HI) ¡len (xs'++ ws) = len xs' + len ws!
+        TI) ¿len ((x:xs') ++ ws) = len (x:xs') ++ len ws?
+
+    Dem caso base, zs = [])
+            ¿len ([] ++ ws) = len [] + len ws?
+
+    LI:
+    len ([] ++ ws)
+    =
+    len (ws)
+    
+    LD:
+    len [] + len ws
+    =
+    0 + len ws
+    =
+    len ws
+
+    Vale en este caso
+
+    Dem caso ind., zs = x:xs'=
+            ¿len ((x:xs') ++ ws) = len (x:xs') + len ws?
+
+    LI:
+    len ((x:xs') ++ ws) 
+    =
+    len (x : xs' ++ ws)
+    =
+    1 + len (xs' ++ ws)
+    =
+    1 + len xs' + len ws
+
+    LD: 
+    len (x:xs') + len ws
+    =
+    1 + len xs' + len ws
+
+    Se cumple para este caso. Se cumple la propiedad
+
+    b)
+
+    Prop.: ¿count (const True) = length?
+    Dem.: Sea xs una lista de elementos cualquiera, por ppio. de 
+            induccion en la estructura de xs, es equivalente demostrar que:
+
+        ¿count (const True) xs = length xs?
+
+    Sea ys una lista de elementos cualquiera, es posible demostrar que:
+
+    Caso base, ys = []) ¿count (const True) [] = length []?
+    Caso inductivo, ys = (y:ys')) 
+        HI) ¡count (const True) ys' = length ys'!
+        TI) ¿count (const True) (y:ys') = length (y:ys')?
+
+    Dem. caso base, ys = [])
+    ¿count (const True) [] = length []?
+    
+    LI:
+    count (const True) []
+    =
+    0
+
+    LD:
+    length []
+    =
+    0
+
+    Se cumple la propiedad para este caso.
+
+    Dem. caso inductivo, ys = (y:ys'))
+    ¿count (const True) (y:ys') = length (y:ys')?
+
+    LI:
+    count (const True) (y:ys')
+    =
+    unoSiCeroSino ((const True) y) + count (const True) ys'
+    =
+    unoSiCeroSino True + count (const True) ys'
+    =
+    1 + count (const True) ys'
+    =
+    1 + length ys'
+
+    LD:
+    length (y:ys')
+    =
+    1 + length ys'
+
+    Se cumple para este caso. Se cumple la propiedad.
+
+    Prop.: ¿elem = any . (==)?
+    Dem.: Para toda lista xs de cualquier tipo, y para cualquier elemento e del mismo tipo, por ppio. de induccion en la estructura de xs,
+    es equivalente demostrar:
+
+    Caso base, xs = [])
+        ¿elem [] = any . (==) []?
+
+    Caso inductivo, xs = (x:xs'))
+        HI) ¡elem e xs' = any . (==) e xs'?
+        TI) ¿elem e (x:xs') = any . (==) e (x:xs')?
+
+    Dem. caso base, xs = [])
+    
+    LI:
+    elem e []
+    =
+    False
+
+    LD:
+    any . (==) e []
+    =
+    any ((==) e) []
+    =
+    False
+
+    Se cumple este caso
+
+    Dem. caso inductivo, xs = (x:xs'))
+    LI:
+    elem e (x:xs')
+    =
+    e == x || elem e xs'
+    =
+    e == x || any . (==) e xs'
+    =
+    e == x || any (== e) xs'
+
+    LD:
+    any . (==) e (x:xs')
+    =
+    any (== e) (x:xs')
+    =
+    (== e) x || any (== e) xs'
+    =
+    e == x || any (== e) xs'
+
+    Se cumple para este caso. Se cumple la propiedad.
+
+    d)
+    Prop.: ¿any (elem x) = elem x . concat?
+    Dem.: Para todo m de cualquier tipo, y para toda lista ys de ese mismo tipo, por ppio de induccion
+    en ys, es equivalente demostrar que:
+
+    Caso base, ys = [])
+        ¿any (elem m) [] = elem m . concat []?
+
+    Caso inductivo, ys = (y:ys'))
+        HI) ¡any (elem m) ys' = elem m . concat ys'!
+        TI) ¿any (elem m) (y:ys') = elem m . concat (y:ys')?
+
+    Dem. caso base, ys = [])
+    LI:
+    any (elem m) []
+    =
+    False
+
+    LD:
+    elem m . concat []
+    =
+    elem m (concat [])
+    =
+    elem m []
+    =
+    False
+
+    Se cumple en este caso.
+
+    Dem. caso indutivo, ys = (y:ys'))
+    HI) ¡any (elem m) ys' = elem m . concat ys'!
+    TI) ¿any (elem m) (y:ys') = elem m . concat (y:ys')?
+    LI:
+    any (elem m) (y:ys') = elem m . concat (y:ys')
+    
+    any (elem m) (y:ys')
+    =
+    (elem m) y || any (elem m) ys'
+    =
+    (elem m) y || elem m . concat ys'
+    =
+    (elem m) y || elem m (concat ys')
+    =
+
+
+    LD:
+    elem m . concat (y:ys')
+    =
+    elem m (concat (y:ys'))
+    =
+    elem m (y ++ concat ys')
+    =
+
+
+
+
+
