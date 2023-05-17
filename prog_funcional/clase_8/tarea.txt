@@ -44,27 +44,24 @@ subset (x:xs) ys = elem x ys && subset xs ys
 
 (++) :: [a] -> [a] -> [a]
 (++) [] ys = ys
-(++) (x:xs) ys = x : (++) xs ys
+(++) (x:xs) ys = x : xs ++ ys
 
 reverse :: [a] -> [a]
 reverse [] = []
-reverse (x:xs) = alFinalLista x reverse xs
-
-alFinallista :: a -> [a] -> [a]
-alFinalLista x [] = x
-alFinalLista x (y:ys) = y : alFinalLista x ys
+reverse (x:xs) = reverse xs ++ [x]
 
 // Prec, las listas deben de tener el mismo largo
 zip :: [a] -> [b] -> [(a, b)]
-zip xs [] = []
 zip [] ys = []
 zip (x:xs) (y:ys) = (x, y) : zip xs ys
 
 unzip :: [(a, b)] -> ([a], [b])
 unzip xs [] = (xs, [])
 unzip [] ys = ([], ys)
-unzip (x:xs) (y:ys) = let (xs', ys') = unzip xs ys
-                        in (x:xs', y:ys')
+unzip (x:xs) (y:ys) = agregarAListaTupla x y unzip xs ys
+
+agregarAListaTupla :: a -> b -> ([a], [b]) -> ([a], [b])
+agregarAListaTupla x y (xs, ys) = (x:xs, y:ys)  
 
 2)
 
@@ -263,14 +260,369 @@ unzip (x:xs) (y:ys) = let (xs', ys') = unzip xs ys
 
 
     LD:
-    elem m . concat (y:ys')
+    elem m . concat (ys:ys')
     =
-    elem m (concat (y:ys'))
+    elem m (concat (ys:ys'))
     =
-    elem m (y ++ concat ys')
+    elem m (ys ++ concat ys')
     =
+    elem m ys || elem m (concat ys')
+    =  def de compose
+    elem m ys || elem m . concat ys'
+    = HI
+    elem m ys || any (elem m) ys'
+
+    Ambas partes llegan al mismo resultado. Se cumple la propiedad
+
+    e)
+    PROP.: ¿subset xs ys = all (flip elem ys) xs?
+    DEM.: Por ppio. de inducción en xs e ys, es equivalente
+            demostrar que:
+        
+        Caso base: xs = [])
+            ¿subset [] ys = all (flip elem ys) []?
+
+        Caso inductivo: xs = (x:xs')
+            HI) ¡subset xs' ys = all (flip elem ys) xs'!
+            TI) ¿subset (x:xs') ys = all (flip elem ys) (x:xs')?
+
+        Dem. caso base:
+        LI:
+        subset [] ys
+        =   Def. subset.1
+        True
+
+        LD:
+        all (flip elem ys) []
+        =   Def. all.1
+        True
+        
+        Dem. caso inductivo:
+        LI:
+        subset (x:xs') ys
+        =
+        elem x ys && subset xs' ys
+        = HI
+        elem x ys && all (flip elem ys) xs'
+        
+
+        LD:
+        all (flip elem ys) (x:xs')
+        =
+        (flip elem ys) x && all (flip elem ys) xs'
+        =   def. flip
+        elem x ys && all (flip elem ys) xs'
+        
+        Se cumple el caso base y el inductivo. Se cumple la propiedad.
 
 
+        f)
+        PROP.: para todo xss. ¿all null xss = null . concat xss?
+        DEM.: Según principio de inducción en la estructura de xss
+
+        CASO BASE: xss = [])
+            ¿all null [] = null . concat []?
+
+        CASO INDUCTIVO: xss = (xs:xss') )
+            HI) ¡all null xss' = null . concat xss'!
+            TI) ¿all null (xs:xss') = null . concat (xs:xss')?
+
+        Dem. caso base:
+        LI:
+        all null []
+        = def. de all.1
+        True
+
+        LD:
+        null . concat []
+        =   def de operador .
+        null (concat [])
+        =   def. concat.1
+        null []
+        =
+        True
+
+        Dem. caso inductivo:
+        LI: 
+        all null (xs:xss')
+        =
+        null xs && all null xss'
+        
+        LD:
+        null . concat (xs:xss')
+        = def. operador .
+        null (concat (xs:xss'))
+        =
+        null (xs ++ concat xss')
+        =
+        null xs && null (concat xss')
+        =   segun def operador .
+        null xs && null . concat xss'
+        = HI
+        null xs && all null xss'
+
+        Se cumplen los casos base y los inductivos. Por lo tanto, se cumple la propiedad
+
+        g)
+        Prop.: ¿length = length . reverse?
+        Dem.: Para todo xs. Por principio de inducción en la estructura de
+                xs, es equivalente demostrar que:
+                ¿length xs = length . reverse xs?
+            
+            Caso base: xs = [])
+                ¿length [] = length . reverse []?
+            
+            Caso inductivo: xs = (x:xs') )
+                HI) ¡length xs' = length . reverse xs'!
+                TI) ¿length (x:xs') = length . reverse (x:xs')?
+
+            Dem. caso base:
+            LI:
+            length []
+            =
+            0
+
+            LD:
+            length . reverse [] 
+            = def de operador .
+            length (reverse [])
+            =   def. reverse.1
+            length []
+            = def. length.1
+            0
+
+            Dem. caso inductivo:
+            LI:
+            length (x:xs')
+            =
+            1 + length xs'
+            
+            LD:
+            length . reverse (x:xs')
+            = def. operador .
+            length (reverse x:xs')
+            =   def. reverse.2
+            length (reverse xs' ++ [x])
+            = Lema length
+            length (reverse xs') + length [x]
+            = def de operador .
+            length . reverse xs' + 1
+            = HI
+            1+ length xs'
+
+            
+            Lema: Distribución de length 
+            Prop.: ¿length (xs ++ [x]) = length xs + length [x]?
+            Dem.: 
+
+            Caso base: xs = [] )
+                ¿length ([] ++ [x])) = length [] + length [x]?
+
+            Caso inductivo: xs = (x':xs') )
+                HI) ¡length (xs' ++ [x]) = length xs' + length [x]!
+                TI) ¿length ((x':xs') ++ [x]) = length (x':xs') + length [x]
+
+            Caso base
+            LI:
+            length ([] ++ [x])
+            = 
+            length [x]
+            =
+            1 + length []
+            =
+            1 + 0
+            =
+            1
+
+            LD:
+            length [] + length [x]
+            =
+            0 + length [x]
+            =
+            0 + 1 + length []
+            =
+            0 + 1 + 0
+            =
+            1
+
+            Caso inductivo:
+            LI:
+            length ((x':xs') ++ [x])
+            =
+            length (x':(xs'++[x]))
+            =
+            1 + length (xs' ++ [x])
+            =
+            1 + length xs' + length [x]
+            =
+            1 + length xs' + 1 + length []
+            =
+            1 + length xs' + 1 + 0
+            =
+            2 + length xs'
+
+            LD:
+            length (x':xs') + length [x]
+            =
+            1 + length xs' + 1 + length []
+            =
+            1 + length xs' + 1 + 0
+            =
+            2 + length xs'
+            
+            Se llega al mismo resultado en ambos lados. Se cumple la propiedad.
+
+        h)
+        Prop.: para todo xs. para todo ys. ¿reverse (xs ++ ys) = reverse ys ++ reverse xs?
+        Dem.: Por principio de inducción en la estructura de xs
+
+        Caso base: xs = [] )
+            ¿reverse ([] ++ ys) = reverse ys ++ reverse []?
+
+        Caso inductivo: xs = (x:xs')
+            HI) ¡reverse (xs' ++ ys) = reverse ys + reverse xs'!
+            TI) ¿reverse ((x:xs') ++ ys) = reverse ys ++ reverse (x:xs')?
+
+        Dem. caso base:
+        LI:
+        reverse ([] ++ ys)
+        = def. operador ++
+        reverse ys
+
+        LD:
+        reverse ys ++ reverse []
+        = def. reverse.1
+        reverse ys ++ []
+        = def ++
+        reverse ys
+
+        Caso inductivo:
+        LI:
+        reverse ((x:xs') ++ ys)
+        = unfold ++
+        reverse (x:(xs' ++ ys))
+        =
+        reverse (xs' ++ ys) ++ [x]
+        = HI
+        reverse ys ++ reverse xs' ++ [x]
+
+        LD:
+        reverse ys ++  reverse (x:xs')
+        =
+        reverse ys ++ reverse xs' ++ [x]
+
+    i)
+    Prop.: para todo xs. para todo ys. ¿all p (xs++ys) = all p (reverse xs) && all p (reverse ys)?
+    Dem.: Según ppio de inducción en la estructura de xs
+
+    Caso base: xs = [])
+            ¿all p ([]++ys) = all p (reverse []) && all p (reverse ys)?
+
+    Caso inductivo: xs = (x:xs'))
+            HI) ¡all p (xs'++ys) = all p (reverse xs') && all p (reverse ys)!
+            TI) ¿all p ((x:xs')++ys) = all p (reverse (x:xs')) && all p (reverse ys)?
+
+    Dem. caso base:
+        LI:
+        all p ([]++ys)
+        =   def. operador ++
+        all p ys
+
+        LD:
+        all p (reverse []) && all p (reverse ys)
+        = def. reverse.1
+        all p [] && all p (reverse ys)
+        =
+        True && all p (reverse ys)
+
+    Dem. caso inductivo:
+        LI:
+        all p ((x:xs')++ys)
+        = unfold ++
+        all p (x:(xs' ++ ys))
+        =  def. all.2
+        p x && all p (xs' ++ ys)
+        = HI
+        p x && all p (reverse xs') && all p (reverse ys)
+        =
 
 
+        LD:
+        all p (reverse (x:xs')) && all p (reverse ys)
+        = def. reverse.2 
+        all p (reverse xs' ++ [x]) && all p (reverse ys)
+        = Lema distribución del all
+        all p (reverse xs') && all p [x] && all p (reverse ys)
+        = def. all.2
+        all p (reverse xs') && p x && all p [] && all p (reverse ys)
+        =
+        all p (reverse xs') && p x && True && all p (reverse ys)
+        = conmutividad del and
+        all p (reverse xs') && True && p x && all p (reverse ys)
+        = Def. operador &&
+        all p (reverse xs') && p x && all p (reverse ys)
+        = conmutividad del &&
+        p x && all p (reverse xs') && all p (reverse ys)
 
+        La propiedad se cumple para todos los casos inductivos y base. La misma es válida.
+
+        Lema distribución del all
+        Prop.: ¿all p (ys ++ xs) = all p ys && all p xs?
+        Dem.: Por principio de inducción en la estructura de ys
+
+        Caso base: ys = [])
+            ¿all p ([] ++ xs) = all p [] && all p xs?
+
+        Caso inductivo: ys = (y:ys')
+            HI) ¡all p (ys' ++ xs) = all p ys' && all p xs!
+            TI) ¿all p ((y:ys') ++ xs) = all p (y:ys') && all p xs?
+
+        Dem. caso base:
+        LI:
+        all p ([] ++ xs)
+        =  def operador ++
+        all p xs
+
+        LD:
+        all p [] && all p xs
+        =  def. all.1
+        True && all p xs
+        =   def. operador &&
+        all p xs
+
+        Dem. caso inductivo:
+        LI:
+        all p ((y:ys') ++ xs)
+        = unfold ++
+        all p (y:(ys' ++ xs))
+        =
+        p y && all p (ys' ++ xs)
+
+        LD:
+        all p (y:ys') && all p xs
+        =
+        p y && all p ys' && all p xs
+        = HI
+        p y && all p (ys' ++ xs)
+
+        Se cumple la propiedad para el caso base e inductivo, por lo que es válida.
+
+    j)
+        La propiedad es falsa por contraejemplo:
+
+        xs = [1, 2]
+        ys = []
+
+        ¿unzip (zip [1, 2] []) = ([1, 2], [])?
+
+        LI:
+        unzip (zip [1,2] [])
+        = def. zip.2
+        bottom
+
+        LD:
+        ([1,2], [])
+
+        No se llega al mismo valor en ambos lados. La propiedad no es correcta.
+
+        
