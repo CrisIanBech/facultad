@@ -235,3 +235,66 @@ i.
         id (S m)
         = def. id
         S m
+
+
+    iv.
+    PROP.: ¿n2nu . nu2n = id?
+    DEM.: Según ppio. de extensionalidad, es equivalente demostrar que:
+        ¿Para todo x :: N. nu2n . n2nu x = id x?
+        Sea n :: N
+        Por ppio de inducción en la estrucctura de n:
+        ¿n2nu . nu2n n = id n?
+
+        Caso base.: n = [])
+            ¿n2nu . nu2n [] = id []?
+        
+        Caso inductivo.: n = (():xs) )
+            HI) ¡n2nu . nu2n xs = id xs!
+            TI) ¿n2nu . nu2n (():xs) = id (():xs)?
+
+        Dem.: 
+        Caso base:
+        LI:
+        n2nu . nu2n []
+        = def. op. .
+        n2nu (nu2n [])
+        = def nu2n.1
+        n2nu Z
+        = def. n2nu.1
+        []
+
+        LD:
+        id []
+        = def. id
+        []
+
+        Se cumpe para este caso.
+
+
+        Caso inductivo:
+        LI:
+        n2nu . nu2n (():xs)
+        = def. op. .
+        n2nu (nu2n (():xs))
+        = def. nu2n.2
+        n2nu (S (nu2n xs))
+        = def. n2nu.2
+        () : (n2nu (nu2n xs))
+        = Def. op. .
+        () : (n2nu . nu2n xs)
+        = HI
+        () : (id xs)
+        = def. id
+        () : xs
+
+        LD:
+        id (():xs)
+        = def. id
+        () : xs
+
+        Se cumple para este caso y para todos. Por lo tanto, se cumple la propiedad.
+
+        
+        
+
+
