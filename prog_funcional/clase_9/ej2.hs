@@ -54,7 +54,7 @@ inOrder EmptyT = []
 inOrder EmptyT = (NodeT h t1 t2) = inOrder t1 ++ [h] ++ inOrder t2
 
 listPerLevel :: Tree a -> [[a]]
-listPerLevel EmptyT = []
+listPerLevel EmptyT = [[]]
 listPerLevel (NodeT h t1 t2) = [h] ++ mergeFirstElement listPerLevel t1 listPerLevel t2
 
 mergeFirstElement :: [[a]] -> [[a]] -> [[a]]
@@ -82,11 +82,11 @@ ramaMasLarga' t1 t2 = if(length t1 > length t2)
 
 
 todosLosCaminos :: Tree a -> [[a]] 
-todosLosCaminos EmptyT = []
+todosLosCaminos EmptyT = [[]]
 todosLosCaminos (NodeT h t1 t2) = addToEveryList h t1 ++ addToEveryList h t2
 
 addToEveryList :: a -> [[a]] -> [[a]]
-addToEveryList e [] = [e]
+addToEveryList e [] = [[e]]
 addToEveryList e (xs:xss) = (e:xs) ++ addToEveryList e xss
 
 
