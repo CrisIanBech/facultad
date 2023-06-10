@@ -31,6 +31,7 @@ cantidadDeSumaCero (Sum exp1 exp2) = unoSiSumaCeroCeroSino exp1 exp2 + cantidadD
 
 unoSiSumaCeroCeroSino (Cte 0) exp2 = 1
 unoSiSumaCeroCeroSino exp1 (Cte 0) = 1
+unoSiSumaCeroCeroSino _ _          = 0
 
 data ExpS = CteS N
     | SumS ExpS ExpS
@@ -99,15 +100,194 @@ Ej 2)
         evalExpA (simplificarExpA (Suma ex1 ex2))
         = def. simplificarExpA.2
         evalExpA (sinSumaDeCero (simplificarExpA ex1) (simplificarExpA ex2))
-        =
+        = LEMA 1
+        evalExpA . simplificarExpA ex1 + evalExpA . simplificarExpA ex2
+        = HI 1 e HI 2
+        evalExpA ex1 + evalExpA ex2
 
+        LD:
+        evalExpA (Suma ex1 ex2)
+        = def. evalExpA.2
+        evalExpA ex1 + evalExpA ex2
+
+
+
+        LEMA 1:
+        evalExpA (sinSumaDeCero ex1 ex2) = evalExpA ex1 + evalExpA ex2
+
+        Análisis por casos:
+
+        Caso 1: ex1 = (Cte 0), ex2 = m
+        Caso 2: ex1 = m, ex2 = (Cte 0)
+        Caso 3, ex1 y ex2 != (Cte 0)
+
+        Dem. caso 1:
+        LI:
+        evalExpA (sinSumaDeCero (Cte 0) ex2)
+        = def. sinSumaDeCero.1
+        evalExpA ex2
+
+        LD:
+        evalExpA (Cte 0) + evalExpA ex2
+        = def. evalExpA.1
+        0 + evalExpA ex2
+        = s. neutro de suma
+        evalExpA ex2
+
+        Dem.caso 2:
+        LI:
+        evalExpA (sinSumaDeCero ex1 (Cte 0))
+        = def. sinSumaDeCero.1
+        evalExpA ex1
+
+        LD:
+        evalExpA ex1 + evalExpA (Cte 0)
+        = def. evalExpA.1
+        evalExpA ex1 + 0
+        = s. neutro de suma
+        evalExpA ex1
         
+        Dem. caso 3:
+        LI:
+        evalExpA (sinSumaDeCero n m)
+        = def. sinSumaDeCero.1
+        evalExpA (Suma n m)
+        =
+        evalExpA n + evalExpA m
 
+        LD:
+        evalExpA n + evalExpA m
 
+        ii.
+        Prop.: ¿cantidadSumaCero . simplificarExpA = const 0?
+        Dem.: Por ppio. de extensionalidad, y siendo x :: ExpA es equivalente demostrar que:
+            ¿cantidadSumaCero . simplificarExpA x = const 0 x?
+            Por ppio. de inducción en la estructura de x:
 
+            Caso base 1: x = (Cte n)
 
+            Caso inductivo 1: x = (Suma e1 e2)
+                HI.1) ¡cantidadDeSumaCero . simplificarExpA e1 = const 0 e1!
+                HI.2) ¡cantidadDeSumaCero . simplificarExpA e2 = const 0 e2!
+                TI) ¿cantidadSumaCero . simplificarExpA (Suma e1 e2) = const 0 (Suma e1 e2)?
+                
+            Caso inductivo 2: x = (Prod e1 e2)
+                HI.1) ¡cantidadDeSumaCero . simplificarExpA e1 = const 0 e1!
+                HI.2) ¡cantidadDeSumaCero . simplificarExpA e2 = const 0 e2!
+                TI) ¿cantidadSumaCero . simplificarExpA (Prod e1 e2) = const 0 (Prod e1 e2)?
 
+        Dem. caso base:
+        LI:
+        cantidadSumaCero . simplificarExpA (Cte n)
+        = def. op. .
+        cantidadSumaCero (simplificarExpA (Cte n))
+        = def. simplificarExpA.1
+        cantidadSumaCero (Cte n)
+        =
+        0
 
+        LD:
+        const 0 (Cte n)
+        = def. const
+        0
+
+        Se llega al mismo resultado en ambos lados. Se cumple para esta propiedad.
+
+        Dem. caso inductivo 1:
+        LI:
+        cantidadSumaCero . simplificarExpA (Suma e1 e2)
+        = def. op. .
+        cantidadSumaCero (simplificarExpA (Suma e1 e2))
+        = def. simplificarExpA.2
+        cantidadDeSumaCero (sinSumaDeCero (simplificarExpA exp1) (simplificarExpA exp2))
+        = LEMA 2
+        cantidadSumaCero . simplificarExpA e1 + cantidadDeSumaCero . simplificarExpA e2
+        = HI 1 y HI 2
+        const 0 e1 + const 0 e2
+        = def. const
+        0 + 0
+        = aritmetica
+        0
+
+        LD:
+        const 0 (Suma e1 e2)
+        = def. const
+        0
+
+    Dem. caso inductivo 2:
+        LI:
+        cantidadSumaCero . simplificarExpA (Prod e1 e2)
+        = def. op. .
+        cantidadSumaCero (simplificarExpA (Prod e1 e2))
+        = LEMA 3
+        cantidadSumaCero . simplificarExpA e1 * cantidadDeSumaCero . simplificarExpA e2
+        = HI 1 y HI 2
+        const 0 e1 * const 0 e2
+        = def. const
+        0 * 0
+        = aritmetica
+        0
+
+        LD:
+        const 0 (Prod e1 e2)
+        = def. const
+        0
+
+    Dem. caso inductivo 3:
+        LI:
+        cantidadSumaCero . simplificarExpA (Prod e1 e2)
+        = def. op. .
+        cantidadSumaCero (simplificarExpA (Prod e1 e2))
+        = def. simplificarExpA.3
+        cantidadSumaCero (sinProdRedundante (simplificarExpA e1) (simplificarExpA e2))
+        = LEMA 3.
+        cantidadSumaCero . simplificarExpA e1 + cantidadSumaCero . simplificarExpA e2
+        = HI 1 y HI 2
+        const 0 e1 + const 0 e2
+        = def. const
+        0 + 0
+        = aritmetica
+        0
+
+        LEMA 1:
+        cantidadDeSumaCero (sinSumaDeCero e1 e2) = cantidadDeSumaCero e1 + cantidadDeSumaCero e2
+
+        Por análisis de casos:
+        Caso 1: e1 = (Cte 0)
+        Caso 2: e2 = (Cte 0)
+        Caso 3: e1 y e2 != (Cte 0)
+
+        Dem. caso 1:
+        LI:
+        cantidadSumaCero (sinSumaDeCero (Cte 0) e2)
+        = def. sinSumaDeCero.1
+        cantidadSumaCero e2
+
+        LD:
+        cantidadDeSumaCero (Cte 0) + cantidadDeSumaCero e2
+        = Def. cantidadDeSumaCero.1
+        0 + cantidadDeSumaCero e2
+        = neutro suma
+        cantidadDeSumaCero e2
+
+        -- El caso 2 es igual que el 1 pero al revés, no lo voy a hacer
+
+        Dem. caso 3:
+        LI:
+        cantidadSumaCero (sinSumaDeCero e1 e2)
+        = def. sinSumaDeCero.3
+        cantidadDeSumaCero (Suma e1 e2)
+        = def. cantidadDeSumaCero.2
+        unoSiSumaCeroCeroSino e1 e2 + cantidadDeSumaCero e1 + cantidadDeSumaCero e2
+        = def. unoSiSumaCeroCeroSino.
+        0 + cantidadDeSumaCero e1 + cantidadDeSumaCero e2
+        = neutro suma
+        cantidadDeSumaCero e1 + cantidadDeSumaCero e2
+        
+        LD:
+        cantidadDeSumaCero e1 + cantidadDeSumaCero e2
+
+        Se cumple la propiedad.
 
         EJ 2)
 
