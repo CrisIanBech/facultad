@@ -1,0 +1,43 @@
+Practica 8 (ejercicios por rehacer)
+
+data ExpA = Cte Int
+            | Suma ExpA ExpA
+            | Prod ExpA ExpA
+
+Implementar:
+
+i)
+evalExpA :: ExpA -> Int
+evalExpA (Cte n) = n
+evalExpA (Suma e1 e2) = (evalExpA e1) + (evalExpA e2) 
+evalExpA (Prod e1 e2) = (evalExpA e1) * (evalExpA e2)
+
+ii)
+simplificarExpA :: ExpA -> ExpA
+simplificarExpA (Cte n) = Cte n
+simplificarExpA (Suma e1 e2) = simpSuma (simplificarExpA e1) (simplificarExpA e2) 
+simplificarExpA (Prod e1 e2) = simpMul (simplificarExpA e1) (simplificarExpA e2)
+
+        simpSuma :: ExpA -> ExpA -> ExpA
+        simpSuma (Cte 0) m = m
+        simpSuma n (Cte 0) = n
+        simpSuma n m = Suma n m
+
+        simpMul :: ExpA -> ExpA -> ExpA
+        simpMul (Cte 0) m = m
+        simpMul n (Cte 0) = n
+        simpMul (Cte 1) m = m
+        simpMul n (Cte 1) = n
+        simpMul n m = Prod n m
+
+iii)
+cantidadDeSumaCero :: ExpA -> Int
+cantidadDeSumaCero (Cte n) = 0
+cantidadDeSumaCero (Suma e1 e2) = unoSiCero e1 + unoSiCero e2 + cantidadDeSumaCero e1 + cantidadDeSumaCero e2
+cantidadDeSumaCero (Prod e1 e2) = cantidadDeSumaCero e1 + cantidadDeSumaCero e2
+
+        unoSiCero :: ExpA -> Int
+        unoSiCero (Cte 0) = 1
+        unoSiCero _ = 0
+
+        

@@ -1,0 +1,94 @@
+Ejercicio 1-b 
+Demostrar
+
+i)
+evalExpA . simplificarExpA = evalExpA
+por ppio. de ext. para todo ex ExpA, (evalExpA . simplificarExpA) ex = evalExpA ex
+por def. (.) (evalExpA . simplificarExpA) ex = evalExpA (simplificarExpA ex)
+
+--Demuestro por induccion estructural sobre ex. Elijo ex = e
+
+evalExpA (simplificarExpA e) = evalExpA e
+
+Caso base e = (Cte n)
+
+evalExpA (simplificarExpA (Cte n)) = evalExpA (Cte n)
+
+--lado izq.
+evalExpA (simplificarExpA (Cte n))
+= --def. de simplificarExpA
+evalExpA (Cte n)
+--llegue a lado derecho.
+
+-------------------------------------------------
+
+Caso inductivo 1. e = Suma e1 e2
+HI1)evalExpA (simplificarExpA e1) = evalExpA e1
+HI2)evalExpA (simplificarExpA e2) = evalExpA e2
+TI) ¿evalExpA (simplificarExpA (Suma e1 e2)) = evalExpA (Suma e1 e2)?
+
+--lado izq.
+evalExpA (simplificarExpA (Suma e1 e2))
+= --def. de simplificarExpA
+evalExpA (simpSuma (simplificarExpA e1) (simplificarExpA e2))
+= --LEMA 1
+evalExpA (simplificarExpA e1) + evalExpA (simplificarExpA e2)
+
+--lado der.
+evalExpA (Suma e1 e2)
+= -- def. evalExpA
+(evalExpA e1) + (evalExpA e2) 
+= -- por HI 1 y 2
+evalExpA (simplificarExpA e1) + evalExpA (simplificarExpA e2)
+
+------LEMA 1
+evalExpA (simpSuma e1 e2) = evalExpA e1 + evalExpA e2
+
+Demuestro por casos
+
+Caso 1 e1 = (Cte 0), e2 = m
+
+--lado izq.
+evalExpA (simpSuma (Cte 0) m)
+= --def. simpSuma
+evalExpA m
+
+--lado der.
+evalExpA (Cte 0) + evalExpA m
+= --def. de evalExpA
+0 + evalExpA m
+= -- neutro de +
+evalExpA m
+
+--------------------------
+
+caso 2 e1 = n, e2 = (Cte 0)
+
+--lado izq.
+evalExpA (simpSuma n (Cte 0))
+= --def. simpSuma
+evalExpA n
+
+--lado der.
+evalExpA n + evalExpA (Cte 0))
+= --def. de evalExpA
+evalExpA n + 0
+= -- neutro de +
+evalExpA n
+
+----------------------------
+
+caso 3 e1 y e2 /= (Cte 0)
+
+evalExpA (simpSuma n m)
+= --def. simpSuma
+evalExpA (Suma n m)
+= --def. evalExpA
+evalExpA n + evalExpA m
+
+
+---LEMA1 demostrado 
+
+-----falta prod
+
+

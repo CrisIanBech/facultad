@@ -1,0 +1,41 @@
+data QuadTree a = LeafQ a
+                | NodeQ (QuadTree a) (QuadTree a)
+                        (QuadTree a) (QuadTree a)
+
+data Color = RGB Int Int Int
+
+type Image = QuadTree Color
+
+(donde QuadTree representa a la estructura de los árboles cuaternarios, Color
+representa a los colores con precisión TrueColor, e Image representa imágenes
+cuadradas de tamaños arbitrarios)
+
+Implementar:
+
+i)
+heightQT :: QuadTree a -> Int
+heightQT LeafQ a = 0
+heightQT NodeQ q1 q2 q3 q4 = 1+ max (max heightQT q1  heightQT q2)  max (heightQT q3  heightQT q4)
+
+ii)
+countLeavesQT :: QuadTree a -> Int
+countLeavesQT LeafQ a = 1
+countLeavesQT NodeQ q1 q2 q3 q4 = countLeavesQT q1 + countLeavesQT q2 
+                                + countLeavesQT q3 + countLeavesQT q4
+
+iii)
+sizeQT :: QuadTree a -> Int
+sizeQT LeafQ a = 1
+sizeQT NodeQ q1 q2 q3 q4 = 1 + sizeQT q1 + sizeQT q2 
+                                    + sizeQT q3 + sizeQT q4
+
+iv)
+compress :: QuadTree a -> QuadTree a
+compress LeafQ a = LeafQ a
+compress NodeQ q1 q2 q3 q4 =  hojaSiEq (compress q1) (compress q2) (compress q3) (compress q4)
+
+    hojaSiEq :: QuadTree a -> QuadTree a -> QuadTree a -> QuadTree a -> QuadTree a 
+    hojaSiEq (LeafQ a1) (LeafQ a2) (LeafQ a3) (LeafQ a4) =
+
+
+ 

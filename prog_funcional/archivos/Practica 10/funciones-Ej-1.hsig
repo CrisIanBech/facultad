@@ -1,0 +1,41 @@
+
+i) --suponiendo que todas las variables estan definidas en la memoria
+evalNExp :: NExp -> Memoria -> Int
+evalNExp (Var v) mem = fromJust (cuantoVale v mem)
+evalNExp (NCte n) mem = n
+evalNExp (NBOp bn e1 e2) mem = appOp bn (evalNExp e1 mem) (evalNExp e2 mem)
+
+        fromJust :: 
+        fromJust (Just n) = n --supongo que las var estan en memoria porque fromJust es una funcion parcial
+
+        appOp :: NBinOp -> Int -> Int
+        appOp Add n1 n2 = n1 + n2
+        appOp Sub n1 n2 = n1 - n2
+        appOp Mul n1 n2 = n1 * n2
+        appOp Div n1 n2 = n1 / n2
+        appOp Mod n1 n2 = n1 % n2
+        appOp Pow n1 n2 = n1 ^ n2
+
+ii)
+cfNExp :: NExp -> NExp
+cfNExp (Var v) = Var v
+cfNExp (NCte n) = NCte n
+cfNExp (NBOp bn e1 e2) = simpOp bn (cfNExp e1) (cfNExp e2)
+
+        simpOp :: NBinOp -> NExp -> NExp
+        simpOp Add e1 e2 = simpAdd e1 e2 --solo voy a hacer simpAdd y Mul pues paja
+        simpOp Sub e1 e2 = simpSub e1 e2
+        simpOp Mul e1 e2 = simpMul e1 e2
+        simpOp Div e1 e2 = simpDiv e1 e2
+        simpOp Mod e1 e2 = simpMod e1 e2
+        simpOp Pow e1 e2 = simpPow e1 e2
+
+        simpAdd :: NExp -> NExp -> NExp
+        simpAdd (Cte 0) m = m
+        simpAdd n (Cte 0) = n
+        simpAdd n m = NBOp Add n m
+
+        simpMul :: NExp -> NExp -> NExp
+        simpMul (Cte 1) m = m
+        simpMul n (Cte 1) = n
+        simpMul n m = NBOp Mul n m

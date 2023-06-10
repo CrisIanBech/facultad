@@ -1,0 +1,27 @@
+iii)
+reverseAL . consAL . reverseAL = snocAL
+para todo x, reverseAL (consAL x (reverseAL )) = snocAL x ---NO ES POR PPIO DE EXT PORQUE HAY QUE AGREGAR TODO ATRAS
+por ppio de ext. para todo al, AppList, reverseAL . consAL . reverseAL al= snocAL al
+por def (.) reverseAL . consAL . reverseAL al = reverseAL (consAL (reverseAL al))
+reverseAL (consAL x (reverseAL al)) = snocAL x al
+
+Elijo al = xs, x = e.
+
+reverseAL (consAL e (reverseAL xs)) = snocAL e xs   --Notar que cuando la funcion no discrimina casos, no hace falta induccion
+
+--lado izq.
+reverseAL (consAL e (reverseAL xs))
+= --def. de consAL
+reverseAL (Append (Single e) (reverseAL xs))
+= --def. de reverseAL
+(Append (reverseAL (reverseAL xs)) (reverseAL (Single e)))
+= --def. reverseAL . reverseAL = id
+Append (id xs) (reverseAL (Single e))
+= --def. de id y def. de reverseAL
+Append xs (Single e)
+
+
+--lado der.
+snocAL e xs
+= --def. snocAL
+Append xs (Single e)

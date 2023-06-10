@@ -1,0 +1,59 @@
+data AppList a = Single a
+                | Append (AppList a) (AppList a)
+
+a) Implementar
+
+i)
+lenAL :: AppList a -> Int
+lenAL Single a = 1
+lenAL (Append al1 al2) = lenAL al1 + lenAL al2
+
+ii)
+consAL :: a -> AppList a -> AppList a
+consAL e al = Append (Single e) al
+
+iii)
+headAL :: AppList a -> a
+headAL Single a = a
+headAL (Append al1 al2) = headAL a1
+
+iv)
+tailAL :: AppList a -> AppList a
+tailAL Single a = Bottom ????? 
+tailAL (Append (Single a) al2) = al2
+tailAL (Append al1 al2) = Append (tailAL al1) al2
+
+v)
+snocAL :: a -> AppList a -> AppList a
+snocAL e al = Append al (Single e)
+
+vi)
+lastAL :: AppList a -> a
+lastAL e (Single a) = a
+lastAL e (Append al1 al2) = lastAL al2
+
+vii)
+initAL :: AppList a -> AppList a
+initAL (Single a) = Bottom
+initAL (Append al1 (Single a)) = al1
+initAL (Append al1 al2) = Append al1 (initAL al2)
+
+vii)
+reverseAL :: AppList a -> AppList a
+reverseAL (Single a) = (Single a)
+reverseAL (Append al1 al2) = Append (reverseAL al2) (reverseAL al1)
+
+ix)
+elemAL :: Eq a => a -> AppList a -> Bool
+elemAL e (Single a) = e == a
+elemAL e (Append al1 al2) = elemAL e al1 || elemAL e al2
+
+x)
+appendAL :: AppList a -> AppList a -> AppList a
+appendAL al1 al2 = Append al1 al2 
+
+xi)
+appListToList :: AppList a -> [a]
+appListToList (Single a) = [a]
+appListToList (Append al1 al2) = appListToList al1 ++ appListToList al2     
+

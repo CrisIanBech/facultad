@@ -1,0 +1,39 @@
+ii)
+reverseAL . reverseAL = id
+por ppio. de ext para todo al AppList, (reverseAL . reverseAL) al = id al
+por def. (.) reverseAL (reverseAL al)
+Elijo al = xs
+--Demuestro por induccion sobre xs
+
+Caso base xs = Single a
+--lado izq.
+reverseAL (reverseAL (Single a))
+= --de. reverseAL
+reverseAL (Single a)
+= --de. reverseAL
+Single a
+
+--lado der.
+id (Single a)
+= --def. de id
+Single a
+
+Caso inductivo xs = Append al1 al2
+
+HI1) reverseAL (reverseAL al) = id al1
+HI2) reverseAL (reverseAL a2) = id al
+TI) ¿reverseAL (reverseAL (Append al1 al2)) = id (Append al1 al2)
+
+--lado izq.
+reverseAL (reverseAL (Append al1 al2))
+= --def. de reverseAL
+reverseAL (Append (reverseAL al2) (reverseAL al1))
+= --def. de reverseAL
+Append (reverseAL (reverseAL al1)) (reverseAL (reverseAL al2))
+= --por HI 1 y 2
+Append al1 al2
+
+--lado der.
+id (Append al1 al2)
+= --def. de id
+Append al1 al2

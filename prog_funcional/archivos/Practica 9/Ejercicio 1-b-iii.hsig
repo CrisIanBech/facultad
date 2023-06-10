@@ -1,0 +1,85 @@
+
+Ejercicio 1-b-iii)
+
+evalExpA . ea2ExpA = evalEA
+por ppio de ext. para todo x EA, (evalExpA . ea2ExpA) x = evalEA x
+por def. de (.) (evalExpA . ea2ExpA) x = evalExpA( ea2ExpA x)
+Demuestro por induccion estructural. Elijo x = ea (cualquiera)
+
+Caso base ea = Const n
+--lado izq
+ evalExpA(ea2ExpA (Const n))
+ = --def. de ea2ExpA 
+evalExpA (Cte n)
+= --def. evalExpA
+n
+
+--lado der.
+ evalEA (Const n)
+= --def.  evalEA
+n
+
+Caso inductivo ea = (BOp b n1 n2)
+
+HI.1)- evalExpA(ea2ExpA n1) = evalEA n1
+HI.2)- evalExpA(ea2ExpA n2) = evalEA n2
+TI.)- ¿evalExpA(ea2ExpA (BOp b n1 n2)) = evalEA (BOp b n1 n2) ?
+
+--lado izq.
+evalExpA(ea2ExpA (BOp b n1 n2))
+= --def. de ee2ExpA
+evalExpA (armarExpA b (ea2ExpA n1) (ea2ExpA n2))
+= --LEMA Aux 1
+realizarOperacion b (evalExpA(ea2ExpA n1)) (evalExpA(ea2ExpA n2))
+= -- por HI 1 y 2
+realizarOperacion b (evalEA n1) (evalEA n2)
+
+
+--lado der.
+evalEA (BOp b n1 n2)
+= --def. evalEA
+realizarOperacion b (evalEA n1) (evalEA n2)
+
+
+
+LEMA Aux 1
+
+evalExpA (armarExpA b (ea2ExpA n1) (ea2ExpA n2)) = realizarOperacion b (evalExpA(ea2ExpA n1)) (evalExpA(ea2ExpA n2))
+
+--Demuestro por casos
+
+b = Sum
+--lado izq.
+evalExpA (armarExpA Sum (ea2ExpA n1) (ea2ExpA n2))
+= --def. de armarExpA
+evalExpA (Suma (ea2ExpA n1) (ea2ExpA n2))
+= -- por def. de evalExpA
+evalExpA (ea2ExpA n1) + evalExpA (ea2ExpA n2)
+= --Por HI1 y HI2
+evalEA n1 + evalEA n2
+
+
+--Por HI1 y HI2
+realizarOperacion Sum (evalExpA(ea2ExpA n1)) (evalExpA(ea2ExpA n2))
+= --def. realizar operacion
+evalExpA(ea2ExpA n1)) + (evalExpA(ea2ExpA n2)
+= -- por HI 1 y 2
+evalEA n1 + evalEA n2
+
+b = Mul
+--lado izq.
+evalExpA (armarExpA Mul (ea2ExpA n1) (ea2ExpA n2))
+= --def. de armarExpA
+evalExpA (Prod (ea2ExpA n1) (ea2ExpA n2))
+= -- por def. de evalExpA
+evalExpA (ea2ExpA n1) * evalExpA (ea2ExpA n2)
+= --Por HI1 y HI2
+evalEA n1 * evalEA n2
+
+
+--Por HI1 y HI2
+realizarOperacion Mul (evalExpA(ea2ExpA n1)) (evalExpA(ea2ExpA n2))
+= --def. realizar operacion
+evalExpA(ea2ExpA n1)) * (evalExpA(ea2ExpA n2)
+= -- por HI 1 y 2
+evalEA n1 * evalEA n2

@@ -1,0 +1,181 @@
+Ejercicio 1-b-ii
+
+cantidadSumaCero . simplificarExpA = const 0
+por ppio. de ext. para todo ex ExpA, (cantidadSumaCero . simplificarExpA) ex = const 0 ex
+por def. (.) (cantidadSumaCero . simplificarExpA) ex = cantidadSumaCero (simplificarExpA ex)
+
+--Demuestro por induccion estructural sobre ex. Elijo ex = e
+
+cantidadSumaCero (simplificarExpA e) = const 0 e
+
+caso base e = Cte n
+
+cantidadSumaCero (simplificarExpA (Cte n)) = const 0 (Cte n)
+
+--lado izq. 
+cantidadSumaCero (simplificarExpA (Cte n))
+= --def. simplificarExpA
+cantidadSumaCero (Cte n)
+= -- def. de cantidadSumaCero
+0
+
+--lado der.
+const 0 (Cte n)
+= --def. const
+0
+
+------------------------
+
+caso inductivo 1 e = Suma e1 e2
+
+HI1) cantidadSumaCero (simplificarExpA e1) = const 0 e1 = 0
+HI2) cantidadSumaCero (simplificarExpA e2) = const 0 e2 = 0
+TI) ¿cantidadSumaCero (simplificarExpA (Suma e1 e2)) = const 0 (Suma e1 e2) = 0?
+
+--lado izq.
+cantidadSumaCero (simplificarExpA (Suma e1 e2))
+= --def. de simplificarExpA
+cantidadSumaCero (simpSuma (simplificarExpA e1) (simplificarExpA e2))
+
+Caso 1
+e1 = (Cte 0)
+e2 = (Cte 0)
+
+cantidadSumaCero (simpSuma (simplificarExpA (Cte 0)) (simplificarExpA (Cte 0)))
+= --def. de simplificarExpA
+cantidadSumaCero (simpSuma (Cte 0) (Cte 0))
+= --def. simpSuma
+cantidadSumaCero (Cte 0)
+= --def. cantidadSumaCero
+0
+
+--------
+Caso 2
+e1 = (Cte 0)
+e2 /= (Cte 0)
+
+cantidadSumaCero (simpSuma (simplificarExpA (Cte 0)) (simplificarExpA e2))
+= --def. simplificarExpA
+cantidadSumaCero (simpSuma (Cte 0) (simplificarExpA e2))
+= --def. simpSuma
+cantidadSumaCero (simplificarExpA e2)
+= --HI 2
+0
+
+Caso 3
+e1 /= (Cte 0)
+e2 = (Cte 0)
+
+cantidadSumaCero (simpSuma (simplificarExpA e1) (simplificarExpA (Cte 0)))
+= --def. simplificarExpA
+cantidadSumaCero (simpSuma (simplificarExpA e1)  (Cte 0))
+= --def. simpSuma
+cantidadSumaCero (simplificarExpA e1)
+= --HI 1
+0
+
+
+Caso 4
+e1 /= (Cte 0)
+e2 /= (Cte 0)
+
+cantidadSumaCero (simpSuma (simplificarExpA e1) (simplificarExpA e2))
+= -- LEMA 1
+cantidadSumaCero (simplificarExpA e1) + cantidadSumaCero (simplificarExpA e2))
+= --por HI 1 y 2
+0 + 0
+= --neutro de la suma
+0
+
+
+
+
+-------------------------LEMA 1-------------------------------
+
+
+
+
+
+cantidadSumaCero (simpSuma e1 e2) = cantidadSumaCero e1 + cantidadSumaCero e2
+
+
+Demuestro por casos
+
+Caso 1
+e1 = Cte 0
+e2 = Cte 0
+
+cantidadSumaCero (simpSuma (Cte 0) (Cte 0)) = cantidadSumaCero (Cte 0) + cantidadSumaCero (Cte 0)
+--lado izq.
+cantidadSumaCero (simpSuma (Cte 0) (Cte 0))
+= --def. simpSuma
+cantidadSumaCero (Cte 0)
+= --def. cantidadSumaCero
+0
+
+--lado der.
+cantidadSumaCero (Cte 0) + cantidadSumaCero (Cte 0)
+= --def. cantidadSumaCero
+0 + 0 = 0
+
+
+Caso 2
+e1 /= Cte 0
+e2 = Cte 0
+
+
+cantidadSumaCero (simpSuma e1 (Cte 0)) = cantidadSumaCero e1 + cantidadSumaCero (Cte 0)
+--lado izq.
+cantidadSumaCero (simpSuma e1 (Cte 0))
+= --def. simpSuma
+cantidadSumaCero e1 
+
+--lado der.
+cantidadSumaCero e1 + cantidadSumaCero (Cte 0)
+= --def. cantidadSumaCero
+cantidadSumaCero e1 + 0
+= --NEUTRO DE LA SUMA 
+cantidadSumaCero e1
+
+-----------------------------------------
+Caso 3
+e1 = Cte 0
+e2 /= Cte 0
+
+
+cantidadSumaCero (simpSuma (Cte 0) e2) = cantidadSumaCero (Cte 0) + cantidadSumaCero e2
+--lado izq.
+cantidadSumaCero (simpSuma (Cte 0) e2)
+= --def. simpSuma
+cantidadSumaCero e2 
+
+--lado der.
+cantidadSumaCero (Cte 0) + cantidadSumaCero (Cte 0)
+= --def. cantidadSumaCero
+0 + cantidadSumaCero e2
+= --NEUTRO DE LA SUMA 
+cantidadSumaCero e2
+
+----------------------------------------
+
+Caso 4
+e1 /= Cte 0
+e2 /= Cte 0
+
+cantidadSumaCero (simpSuma e1 e2) = cantidadSumaCero e1 + cantidadSumaCero e2
+
+--lado izq.
+cantidadSumaCero (simpSuma e1 e2)
+= --def. simpSuma
+cantidadSumaCero (Suma e1 e2) 
+= --def. cantidadDeSumaCero
+unoSiCero e1 + unoSiCero e2 + cantidadDeSumaCero e1 + cantidadDeSumaCero e2
+= --como estoy demostrando el caso donde e1 y e2 son distintos de  Cte 0
+0 + 0 + cantidadDeSumaCero e1 + cantidadDeSumaCero e2
+= --neutro de la suma
+cantidadDeSumaCero e1 + cantidadDeSumaCero e2
+--llego a lado derercho
+
+------LEMA demostrado
+
+------falta Prod

@@ -1,0 +1,68 @@
+Ejercicio 1-b-iv)
+
+evalEA . expA2ea = evalExpA
+por ppio de ext. para todo x EA, (evalEA . expA2ea) x = evalExpA x
+por def. de (.) (evalEA . expA2ea) x = evalEA( expA2ea x)
+Demuestro por induccion estructural. Elijo x = ex (ExpA cualquiera)
+
+Caso base ex = (Cte n)
+
+--lado izq.
+evalEA( expA2ea (Cte n))
+= --def. de expA2ea
+evalEA (Const n)
+= --def de evalEA
+n
+
+--lado der.
+evalExpA (Cte n)
+= --def. de evalExpA
+n
+
+Caso inductivo 1) ex = (Suma n m)
+
+HI1) evalEA( expA2ea n) = evalExpA n
+HI2) evalEA( expA2ea m) = evalExpA m
+TI) ¿evalEA( expA2ea (Suma n m)) = evalExpA (Suma n m)?
+
+--lado izq.
+evalEA( expA2ea (Suma n m))
+= --def. de expA2ea
+evalEA (BOp Sum (expA2ea n) (expA2ea m))
+= --def. evalEA
+realizarOperacion Sum (evalEA (expA2ea n)) (evalEA (expA2ea m))
+= --def. de realizar operacion
+(evalEA (expA2ea n)) + (evalEA (expA2ea m))
+= --por HI1 y HI2
+evalExpA n + evalExpA m
+
+
+--lado der.
+evalExpA (Suma n m)
+= --def. de evalExpA
+evalExpA n + evalExpA m
+
+
+Caso inductivo 2) ex = (Prod n m)
+
+HI1) evalEA( expA2ea n) = evalExpA n
+HI2) evalEA( expA2ea m) = evalExpA m
+TI) ¿evalEA( expA2ea (Prod n m)) = evalExpA (Prod n m)?
+
+
+--lado izq.
+evalEA( expA2ea (Prod n m))
+= --def. de expA2ea
+evalEA (BOp Mul (expA2ea n) (expA2ea m))
+= --def. evalEA
+realizarOperacion Mul (evalEA (expA2ea n)) (evalEA (expA2ea m))
+= --def. de realizar operacion
+(evalEA (expA2ea n)) * (evalEA (expA2ea m))
+= --por HI1 y HI2
+evalExpA n * evalExpA m
+
+
+--lado der.
+evalExpA (Prod n m)
+= --def. de evalExpA
+evalExpA n * evalExpA m

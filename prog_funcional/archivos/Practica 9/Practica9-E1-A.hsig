@@ -1,0 +1,27 @@
+data EA = Const Int | BOp BinOp EA EA
+data BinOp = Sum | Mul
+
+data ExpA = Cte n | Suma ExpA ExpA | Prod ExpA ExpA
+
+
+evalEA :: EA -> Int
+evalEA (Const n) = n
+evalEA (BOp b n1 n2) = realizarOperacion b (evalEA n1) (evalEA n2)
+
+realizarOperacion :: BinOp -> Int -> Int -> Int
+realizarOperacion (Sum n1 n2) = n1 + n2
+realizarOperacion (Mul n1 n2) = n1 * n2
+
+ea2ExpA :: EA -> ExpA
+ea2ExpA (Const n) = Cte n
+ea2ExpA (BOp b n1 n2) = armarExpA b (ea2ExpA n1) (ea2ExpA n2)
+
+armarExpA :: BinOp -> ExpA -> ExpA -> ExpA
+armarExpA (Sum e1 e2) = Suma e1 e2
+armarExpA (Mul e1 e2) = Prod e1 e2
+
+expA2ea :: ExpA -> EA
+expA2ea (Cte n) = Const n
+expA2ea (Suma n m) = BOp Sum (expA2ea n) (expA2ea m)
+expA2ea (Prod n m) = BOp Mul (expA2ea n) (expA2ea m)
+

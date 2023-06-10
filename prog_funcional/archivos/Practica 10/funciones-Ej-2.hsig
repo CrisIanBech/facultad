@@ -1,0 +1,59 @@
+Ejercicio 2
+
+data BExp = BCte Bool
+            | Not BExp
+            | And BExp BExp
+            | Or BExp BExp
+            | ROp RelOp NExp NExp
+
+data RelOp = Eq | NEq -- Equal y NotEqual
+            | Gt | GEq -- Greater y GreaterOrEqual
+            | Lt | LEq -- Lower y LowerOrEqual
+
+
+data NExp = Var Variable
+            | NCte Int
+            | NBOp NBinOp NExp NExp
+
+data NBinOp = Add | Sub | Mul | Div | Mod | Pow
+
+i)  ---- asumiendo que puedo usar los operadores que entienden los booleanos
+evalBExp :: BExp -> Memoria -> Bool
+evalBExp (BCte b) mem = b
+evalBExp (Not be) mem = not (evalBExp be mem) 
+evalBExp (And be1 be2) mem = (evalBExp be1 mem) && (evalBExp be2 mem)
+evalBExp (Or be1 be2) mem = (evalBExp be1 mem) || (evalBExp be2 mem)
+evalBExp (ROp rp ne1 ne2) mem = evalROp rp (evalNExp ne1 mem) (evalNExp ne2 mem) 
+
+        evalROp :: RelOp -> Int -> Int -> Bool
+        evalROp (Eq n1 n2) = n1 == n2
+        evalROp (NEq n1 n2) = n1 /= n2
+        evalROp (Gt n1 n2) = n1 > n2
+        evalROp (GEq n1 n2) = n1 >= n2
+        evalROp (Lt n1 n2) = n1 < n2
+        evalROp (LEq n1 n2) = n1 =< n2
+
+
+ii)
+cfBExp :: BExp -> BExp
+cfBExp (BCte b) = BCte b
+cfBExp (Not be) = cfNot (cfBExp be)
+cfBExp (And be1 be2) = cfAnd (cfBExp be1) (cfBExp be2)
+cfBExp (Or be1 be2) = cfOr (cfBExp be1) (cfBExp be2)
+cfBExp (ROp rp ne1 ne2) = cfROp rp (cfNExp ne1) (cfNExp ne2)
+    
+    cfNot :: BExp -> BExp
+    cfNot (BCte b) = BCte (not b)
+    cfNot be = Not be
+
+    cfAnd :: BExp -> BExp -> BExp
+    cfAnd (BCte b) be = if b then be else (BCte False)
+    cfAnd be1 be2 = And be1 be2
+
+    cfOr :: BExp -> BExp -> BExp
+    cfOr (BCte b) be = if b then (BCte True) else be
+    cfOr be1 be2 = Or be1 be2
+
+    cfROp :: RelOp -> NExp -> NExp -> BExp
+    cfROp (rop (Cte n) (Cte m)) = BCte (evalROp rop n m)
+    cfROp rop ne1 ne2 = ROp rop ne1 ne2

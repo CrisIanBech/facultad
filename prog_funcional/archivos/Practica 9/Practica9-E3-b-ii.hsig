@@ -1,0 +1,44 @@
+ii) Demostrar
+
+reverse . inOrder = inOrder . mirrorT
+
+por ppio de ext. para todo a, Arbol. (reverse . inOrder) a = (inOrder . mirrorT) a
+por def. de (.)  reverse (inOrder a) = inOrder (mirrorT a)
+
+Caso base a = EmptyT
+--lado izq.
+reverse (inOrder EmptyT)
+= --def. de listInOrder
+reverse []
+= --def. de reverse
+[]
+
+--lado der.
+inOrder (mirrorT EmptyT)
+= --def. de mirrorT
+inOrder EmptyT
+= --por def. de listInOrder
+= []
+
+Caso inductivo a = Node x t1 t2
+HI1) reverse (inOrder t1) = inOrder (mirrorT t1)
+HI1) reverse (inOrder t2) = inOrder (mirrorT t2)
+TI) ¿reverse (inOrder (Node x t1 t2)) = inOrder (mirrorT (Node x t1 t2))?
+
+--lado izq.
+reverse (inOrder (Node x t1 t2))
+= --def. de inOrder
+reverse (inOrder t1 ++ [x] ++ inOrder t2)
+= --LEMA reverse(xs++ys) = reverse(xs) ++ reverse(ys)
+reverse(inOrder t1) ++ reverse([x] ++ inOrder t2)
+= --def. LEMA reverse(xs++ys) = reverse(xs) ++ reverse(ys)  (lemas demostrados, buscarlos)
+reverse(inOrder t1) ++ reverse([x]) ++ reverse(inOrder t2)
+= --HI 1 y 2
+inOrder (mirrorT t1) ++ reverse([x]) ++ inOrder (mirrorT t2)
+= --def. de reverse
+inOrder (mirrorT t1) ++ [x] ++ inOrder (mirrorT t2)
+= --def. inOrder
+inOrder (Node x (mirrorT t1) (mirrorT t2))
+= -- def. de mirrorT
+inOrder (mirrorT (Node x t1 t2))  ---llego al lado der.
+

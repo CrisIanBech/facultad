@@ -1,0 +1,275 @@
+data NExp = Var Variable
+            | NCte Int
+            | NBOp NBinOp NExp NExp
+
+data NBinOp = Add | Sub | Mul | Div | Mod | Pow
+type Variable = String
+
+enBlanco :: Memoria, que describe una memoria vacía.
+
+cuantoVale :: Variable -> Memoria -> Maybe Int, que describe
+    el número asociado a la variable dada en la memoria dada.
+
+recordar :: Variable -> Int -> Memoria -> Memoria, que la
+    memoria resultante de asociar el número dado a la variable dada en la
+    memoria dada.
+
+variables :: Memoria -> [Variable], que describe las variables que
+    la memoria recuerda.
+
+i) --suponiendo que todas las variables estan definidas en la memoria
+evalNExp :: NExp -> Memoria -> Int
+evalNExp (Var v) mem = fromJust (cuantoVale v mem)
+evalNExp (NCte n) mem = n
+evalNExp (NBOp bn e1 e2) mem = appOp bn (evalNExp e1 mem) (evalNExp e2 mem)
+
+        fromJust :: 
+        fromJust (Just n) = n --supongo que las var estan en memoria porque fromJust es una funcion parcial
+
+        appOp :: NBinOp -> Int -> Int -> Int --tambien se puede escribir el significado de cada constructor como hizo fidel
+        appOp Add n1 n2 = n1 + n2   -- appOp Add = (+)
+        appOp Sub n1 n2 = n1 - n2   -- appOp Sub = (-)
+        appOp Mul n1 n2 = n1 * n2   -- appOp Mul = (*)
+        appOp Div n1 n2 = div n1 n2   -- appOp Div = (div)
+        appOp Mod n1 n2 = mod n1 n2   -- appOp Mod = (mod)
+        appOp Pow n1 n2 = n1 ^ n2   -- appOp Pow = (^)
+
+ii)
+cfNExp :: NExp -> NExp
+cfNExp (Var v) = Var v
+cfNExp (NCte n) = NCte n
+cfNExp (NBOp bn e1 e2) = simpOp bn (cfNExp e1) (cfNExp e2)
+
+        simpOp :: NBinOp -> NExp -> NExp -> NExp
+        simpOp Add e1 e2 = simpAdd e1 e2 --solo voy a hacer simpAdd y Mul pues paja
+        simpOp Sub e1 e2 = simpSub e1 e2
+        simpOp Mul e1 e2 = simpMul e1 e2
+        simpOp Div e1 e2 = simpDiv e1 e2
+        simpOp Mod e1 e2 = simpMod e1 e2
+        simpOp Pow e1 e2 = simpPow e1 e2
+
+        simpAdd :: NExp -> NExp -> NExp
+        simpAdd (Cte n) (Cte m)= Cte(n+m)
+        simpAdd n m = NBOp Add n m
+
+        simpMul :: NExp -> NExp -> NExp
+        simpMul (Cte n) (Cte m) = Cte (n*m)
+        simpMul n m = NBOp Mul n m
+
+
+Demostrar:
+
+evalNExp . cfNExp = evalNExp 
+por ppio de ext. para todo ex.
+                (evalNExp . cfNExp) ex = evalNExp ex
+  para todo mem, memoria --en la memoria queda el para todo, no elijo una memoria fija
+por def de (.) evalNExp (cfNExp ex) mem = evalNExp ex mem
+
+--demuestro por ind. estructural sobre ex. Elijo ex = e
+
+Caso base e = Var v     evalNExp (cfNExp (Var v)) mem = evalNExp (Var v) mem
+--lado izq.
+evalNExp (cfNExp (Var v)) mem
+= --def. de cfNExp
+evalNExp (Var v) mem
+--llegue a lado der.
+
+
+Caso base e = Cte n   evalNExp (cfNExp (Cte n)) mem = evalNExp (Cte n) mem
+--lado izq.
+evalNExp (cfNExp (Cte n)) mem
+= --def. de cfNExp
+evalNExp (NCte n) mem
+--llegue a lado der.
+
+Caso inductivo e = NBOp bn e1 e2   evalNExp (cfNExp (NBOp bn e1 e2)) mem = evalNExp (NBOp bn e1 e2) mem
+
+HI1) evalNExp (cfNExp e1) mem = evalNExp e1  mem
+HI2) evalNExp (cfNExp e2) mem = evalNExp e2  mem
+TI) ¿evalNExp (cfNExp (NBOp bn e1 e2)) mem = evalNExp (NBOp bn e1 e2) mem?
+
+--lado izq.
+evalNExp (cfNExp (NBOp bn e1 e2)) mem
+= --def. de cfNExp
+evalNExp (simpOp bn (cfNExp e1) (cfNExp e2)) mem
+
+---cuando ves que va a quedar un choclo, retirarse de aqui y llorar y morir. (de nuevo abajo)
+
+--lado der.
+evalNExp (NBOp bn e1 e2) mem
+= --def. de evalNExp
+appOp bn (evalNExp e1 mem) (evalNExp e2 mem)
+
+----continuamos por aqui, separando en casos las TI
+
+Caso inductivo e = NBOp bn e1 e2   evalNExp (cfNExp (NBOp bn e1 e2)) mem = evalNExp (NBOp bn e1 e2) mem
+
+HI1) evalNExp (cfNExp e1) mem = evalNExp e1  mem
+HI2) evalNExp (cfNExp e2) mem = evalNExp e2  mem
+
+Caso bn = Add
+
+TI) ¿evalNExp (cfNExp (NBOp Add e1 e2)) mem = evalNExp (NBOp Add e1 e2) mem?
+
+--lado izq.
+evalNExp (cfNExp (NBOp Add e1 e2)) mem
+= --def. cfNExp
+evalNExp (simpOp Add (cfNExp e1) (cfNExp e2)) mem
+= --def. simpOp Add
+evalNExp (simpAdd (cfNExp e1) (cfNExp e2)) mem
+= -- LEMA 1
+(evalNExp (cfNExp e1) mem) + (evalNExp (cfNExp e2) mem)
+
+
+--lado der. 
+evalNExp (NBOp Add e1 e2) mem
+= --def. de evalNExp
+appOp Add (evalNExp e1 mem) (evalNExp e2 mem)
+= --def. appOp
+(evalNExp e1 mem) + (evalNExp e2 mem)
+= -- por HI 1 y 2
+(evalNExp (cfNExp e1) mem) + (evalNExp (cfNExp e2) mem)
+
+----llego a lo mismo, demostrado para bn = Add
+
+----------------------------LEMA 1--------------------------------
+--para toda memoria 
+evalNExp (simpAdd e1 e2) mem = (evalNExp e1 mem) + (evalNExp e2 mem)
+
+--demuestro por casos sobre e1 y e2
+-------------------------------------------------
+caso e1 = (Cte 0), e2 /= (Cte 0)
+
+¿evalNExp (simpAdd (Cte 0) e2) mem = (evalNExp (Cte 0) mem) + (evalNExp e2 mem)?
+--lado izq.
+evalNExp (simpAdd (Cte 0) e2) mem
+= --def. simpAdd
+evalNExp e2 mem
+
+--lado der.
+(evalNExp (Cte 0) mem) + (evalNExp e2 mem)
+= --def. de evalNExp
+0 + (evalNExp e2 mem)
+= --artimetica
+evalNExp e2 mem
+-------LLEGUE
+
+----------------------------------------------
+
+caso e1 /= (Cte 0), e2 = (Cte 0)
+
+¿evalNExp (simpAdd e1 (Cte 0)) mem = (evalNExp e1 mem) + (evalNExp (Cte 0) mem)?
+--lado izq.
+evalNExp (simpAdd e1 (Cte 0)) mem
+= --def. simpAdd
+evalNExp e1 mem
+
+--lado der.
+(evalNExp e1 mem) + (evalNExp (Cte 0) mem)
+= --def. de evalNExp
+(evalNExp e1 mem) + 0
+= --artimetica
+evalNExp e1 mem
+-------LLEGUE
+
+--------------------------------
+caso e1 /= (Cte 0) y e2 /= (Cte 0)
+
+¿evalNExp (simpAdd e1 e2) mem = (evalNExp e1 mem) + (evalNExp e2 mem)?
+--lado izq.
+evalNExp (simpAdd e1 e2) mem
+= --def. simpAdd
+evalNExp (NBOp Add e1 e2) mem 
+= --def. evalNExp
+appOp Add (evalNExp e1 mem) (evalNExp e2 mem)
+= --def. appOP
+(evalNExp e1 mem) + (evalNExp e2 mem) 
+---llego a lado der. 
+            ---LEMA demostrado.
+-----------------------------------LEMA 1------------------------------------
+
+Caso bn = Mul
+
+TI) ¿evalNExp (cfNExp (NBOp Mul e1 e2)) mem = evalNExp (NBOp Mul e1 e2) mem?
+
+
+--lado izq.
+evalNExp (cfNExp (NBOp Mul e1 e2)) mem
+= --def. cfNExp
+evalNExp (simpOp Mul (cfNExp e1) (cfNExp e2)) mem
+= --def. simpOp Add
+evalNExp (simpAdd (cfNExp e1) (cfNExp e2)) mem
+= -- LEMA 1
+(evalNExp (cfNExp e1) mem) * (evalNExp (cfNExp e2) mem)
+
+
+--lado der. 
+evalNExp (NBOp Mul e1 e2) mem
+= --def. de evalNExp
+appOp Mul (evalNExp e1 mem) (evalNExp e2 mem)
+= --def. appOp
+(evalNExp e1 mem) * (evalNExp e2 mem)
+= -- por HI 1 y 2
+(evalNExp (cfNExp e1) mem) * (evalNExp (cfNExp e2) mem)
+
+----llego a lo mismo, demostrado para bn = Add
+
+----------------------------LEMA 1--------------------------------
+--para toda memoria 
+evalNExp (simpMul e1 e2) mem = (evalNExp e1 mem) * (evalNExp e2 mem)
+
+--demuestro por casos sobre e1 y e2
+-------------------------------------------------
+caso e1 = (Cte 1), e2 /= (Cte 1)
+
+¿evalNExp (simpMul (Cte 1) e2) mem = (evalNExp (Cte 1) mem) * (evalNExp e2 mem)?
+--lado izq.
+evalNExp (simpMul (Cte 1) e2) mem
+= --def. simpMul
+evalNExp e2 mem
+
+--lado der.
+(evalNExp (Cte 1) mem) * (evalNExp e2 mem)
+= --def. de evalNExp
+1 * (evalNExp e2 mem)
+= --artimetica
+evalNExp e2 mem
+-------LLEGUE
+
+----------------------------------------------
+
+caso e1 /= (Cte 1), e2 = (Cte 1)
+
+¿evalNExp (simpMul e1 (Cte 1)) mem = (evalNExp e1 mem) * (evalNExp (Cte 1) mem)?
+--lado izq.
+evalNExp (simpMul e1 (Cte 1)) mem
+= --def. simpMul
+evalNExp e1 mem
+
+--lado der.
+(evalNExp e1 mem) * (evalNExp (Cte 1) mem)
+= --def. de evalNExp
+(evalNExp e1 mem) * 1
+= --artimetica
+evalNExp e1 mem
+-------LLEGUE
+
+--------------------------------
+caso e1 /= (Cte 1) y e2 /= (Cte 1)
+
+¿evalNExp (simpMul e1 e2) mem = (evalNExp e1 mem) * (evalNExp e2 mem)?
+--lado izq.
+evalNExp (simpMul e1 e2) mem
+= --def. simpMul
+evalNExp (NBOp Mul e1 e2) mem 
+= --def. evalNExp
+appOp Mul (evalNExp e1 mem) (evalNExp e2 mem)
+= --def. appOP
+(evalNExp e1 mem) * (evalNExp e2 mem) 
+---llego a lado der. 
+            ---LEMA demostrado.
+-----------------------------------LEMA 2------------------------------------
+
+
+
+-----SOLO DEMOSTRAMOS CON ADD Y MUL

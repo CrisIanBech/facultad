@@ -1,0 +1,42 @@
+data Arbol a b = Hoja b | Nodo a (Arbol a b) (Arbol a b)
+
+Demostrar la siguiente propiedad: para todo t :: Arbol a b
+         cantidadDeHojas t + cantidadDeNodos t = cantidadDeConstructores t
+
+Elijo t = a (Arbol a b cualquiera)
+
+Caso base a = Hoja b
+
+--lado izq.
+cantidadDeHojas (Hoja b) + cantidadDeNodos (Hoja b)
+= -- def. cantidadDeHojas
+1 + cantidadDeNodos (Hoja b)
+= --def. cantidadDeNodos
+1 + 0
+= --aritmetica 
+1
+
+--lado der.
+cantidadDeConstructores (Hoja b)
+= --def. de cantidadDeConstructores
+1
+
+Caso inductivo a = (Nodo a a1 t2))
+
+HI1) cantidadDeHojas t1 + cantidadDeNodos t1 = cantidadDeConstructores t1
+HI1) cantidadDeHojas t2 + cantidadDeNodos t2 = cantidadDeConstructores t2
+TI) ¿cantidadDeHojas (Nodo a t1 t2)) + cantidadDeNodos (Nodo a t1 t2)) = cantidadDeConstructores (Nodo a t1 t2))?
+
+--lado izq.
+cantidadDeHojas ((Nodo a t1 t2)) + cantidadDeNodos (Nodo a t1 t2)) 
+= --def. cantidadDeHojas
+cantidadDeHojas t1 + cantidadDeHojas t2  + cantidadDeNodos (Nodo a t1 t2))
+=  --def. cantidadDeNodos
+cantidadDeHojas t1 + cantidadDeHojas t2 + 1 + cantidadDeNodos t1 + cantidadDeNodos t2
+= --por HI 1 y 2 (y distributiba de la suma)
+ 1 + cantidadDeConstructores t1 + cantidadDeConstructores t2  
+
+--lado der.
+cantidadDeConstructores (Nodo a t1 t2))
+= --def. de cantidadDeConstructores
+1 + cantidadDeConstructores t1 + cantidadDeConstructores t2
