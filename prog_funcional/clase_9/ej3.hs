@@ -167,3 +167,76 @@ i.
             Se cumple para este caso.
 
 
+
+
+        ii.
+        Prop.: ¿reverse . listInOrder = listInOrder . mirrorT?
+        Dem.: Por ppio. de extensionalidad, es equivalente demostrar que
+        para todo t :: Tree a:
+            ¿reverse . listInOrder t = listInOrder . mirrorT t?
+
+        Sea k un Tree a cualquiera. Por ppio. de inducción en la esturctura de 
+        k, es equivalente demostrar que:
+            ¿reverse . listInOrder k = listInOrder . mirrorT k?
+
+        Caso base: k = EmptyT
+            ¿reverse . listInOrder EmptyT = listInOrder . mirrorT EmptyT?
+        
+        Caso inductivo: k = NoteT e t1 t2
+            HI.1) ¡reverse . listInOrder t1 = listInOrder . mirrorT t1!
+            HI.2) ¡reverse . listInOrder t2 = listInOrder . mirrorT t2!
+            TI) ¿reverse . listInOrder (NoteT e t1 t2) = listInOrder . mirrorT (NoteT e t1 t2)?
+
+        
+        Dem. caso base:
+            LI:
+            reverse . listInOrder EmptyT
+            = def. op. .
+            reverse (listInOrder EmptyT)
+            = def. inOrder
+            reverse []
+            = def. reverse
+            []
+
+            LD:
+            listInOrder . mirrorT EmptyT
+            = def. op. .
+            listInOrder (mirrorT EmptyT)
+            = def. mirrorT
+            listInOrder EmptyT
+            = def. listInOrder
+            []
+
+        Dem. caso inductivo:
+            LI:
+            reverse . listInOrder (NoteT e t1 t2)
+            = def. op. .
+            reverse (listInOrder (NoteT e t1 t2))
+            = def. inOrder
+            reverse (inOrder t1 ++ [h] ++ inOrder t2)
+            = asociatividad del operador ++
+            reverse (inOrder t1 ++ ([h] ++ inOrder t2))
+            = Lema practica 8. ej 2. h)
+            reverse (inOrder t1) ++ reverse (([h] ++ inOrder t2))
+            = Lema practica 8. ej 2. h)
+            reverse (inOrder t1) ++ (reverse [h] ++ (reverse inOrder t2))
+            = asociatividad del operador ++
+            (reverse inOrder t2) ++ reverse [h] ++ (reverse (inOrder t1)) 
+            = HI.1 y HI.2
+            listInOrder . mirrorT t1 ++ reverse [h] ++ listInOrder . mirrorT t2
+            = def. reverse
+            listInOrder . mirrorT t2 ++ [h] ++ listInOrder . mirrorT t1
+            = def. op. .
+            listInOrder (mirrorT t2) ++ [h] ++ listInOrder (mirrorT t1)
+
+            LD:
+            listInOrder . mirrorT (NoteT e t1 t2)
+            = def. op. .
+            listInOrder (mirrorT (NoteT e t1 t2))
+            = def. mirrorT
+            listInOrder (NodeT e (mirrorT t2) (mirrorT t1))
+            = def. listInOrder
+            inOrder (mirror t2) ++ [e] ++ inOrder (mirror t1)
+
+        
+        Se cumplen ambos casos. Vale la propiedad.
