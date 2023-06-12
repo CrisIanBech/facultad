@@ -43,4 +43,61 @@ simplificarNExpSum (Cte 0) nexp2 = nexp2
 simplificarNExpSum nexp1 nexp2   = NBOp Sum exp1 exp2
 
 
+Prop.: ¿evalNExp . cfNExp = evalNExp?
+Dem.: Por ppio. de extensionalidad, es equivalente demostrar que:
+    ¿Para todo nexp :: NExp. evalNExp . cfNExp nexp = evalNExp nexp?
+    Sea m :: Memoria. Sea nexp :: NExp ¿evalNExp . cfNExp nexp m = evalNExp nexp m?
+    Por induccion en la estructura de nexp:
 
+Caso base 1: nexp = Var x
+    ¿evalNExp . cfNExp (Var x) m = evalNExp (Var x) m?
+
+Caso base 2: nexp = NCte n
+    ¿evalNExp . cfNExp (NCte n) m = evalNExp (NCte n) m?
+
+Caso inductivo: nexp = NBOp nb e1 e2
+    HI.1) ¡evalNExp . cfNExp e1 m = evalNExp e1 m!
+    HI.2) ¡evalNExp . cfNExp e2 m = evalNExp e2 m!
+    TI) ¿evalNExp . cfNExp (NBOp nb e1 e2) m = evalNExp (NBOp nb e1 e2) m?
+
+Dem. caso base 1:
+    LI:
+    evalNExp . cfNExp (Var x) m
+    = def. op. .
+    evalNExp (cfNExp (Var x)) m
+    = def. cfNExp.1
+    evalNExp (Var x) m
+
+    Se llega al lado derecho
+    
+Dem. caso base 2:
+    LI: 
+    evalNExp . cfNExp (NCte n) m
+    = def. op. .
+    evalNExp (cfNExp (NCte n)) m
+    = def. cfNExp.2
+    evalNExp (NCte n) m
+
+    Se llega al lado derecho.
+
+Dem caso inductivo:
+    LI:
+    evalNExp . cfNExp (NBOp nb e1 e2) m
+    = def. op. .
+    evalNExp (cfNExp (NBOp nb e1 e2)) m
+    =
+    evalNExp (simplificarNExp nbop (cfNExp exp1) (cfNExp exp2)) m
+    = LEMA 1
+    evalNbop nbop (evalNExp . cfNExp exp1 m) (evalNExp . cfNExp exp2 m)
+    = HI.1 HI.2
+    evalNbop nbop (evalNExp e1 m) (evalNExp e2 m)
+
+    LD:
+    evalNExp (NBOp nb e1 e2) m
+    = df. evalNExp
+    evalNbop nbop (evalNExp exp1 m) (evalNExp exp2 m)
+
+LEMA 1:
+¿evalNExp (simplificarNExp nbop exp1 exp2) m = evalNbop nbop (evalNExp exp1 m) (evalNExp exp2 m)?
+
+-- Paja para desarrollar. Hay que probar por todos los casos de simplificarNExp == evalNbop
