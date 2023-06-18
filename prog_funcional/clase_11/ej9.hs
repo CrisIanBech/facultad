@@ -65,3 +65,26 @@ drop = flip (foldr' g (const []))
 (!!) :: Int -> [a] -> a
 (!!) = flip (foldr' g (error "no se encuentra en la lista"))
         where g x h n = if(n == 0) then x else h (n - 1)
+
+
+ej.10
+
+a. filter id :: [a] -> [b]
+
+b. map (\x y z -> (x, y, z)) :: No tiene.
+
+c. map (+) :: No tiene
+
+d. filter fst :: [(Bool, Bool)] -> [(Bool, Bool)]
+
+e. filter (flip const (+)) :: No tiene
+
+f. map const :: No tiene
+
+g. map twice ::  ((a -> a) -> a -> a) -> [(a -> a)] -> [a -> a]
+
+h. foldr twice :: a -> [(a -> a)] -> a
+
+i. zipWith fst :: (a -> b -> c) -> [a] -> [b] -> [c] :: No tiene
+
+j. foldr (\x r z -> (x, z) : r z) (const []) :: [a] -> b -> [(a, b)]
