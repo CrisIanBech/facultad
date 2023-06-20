@@ -6,8 +6,8 @@ evalEA (Const n) = n
 evalEA (BOp binOp exp1 exp2) = evalBinop binOp evalEA exp1 evalEA exp2
 
 evalBinop :: BinOp -> Int -> Int -> Int
-evalBinop (Sum) n1 n2 = (+)
-evalBinop (Mul) n1 n2 = (*)
+evalBinop (Sum) = (+)
+evalBinop (Mul) = (*)
 
 data ExpA = Cte Int
     | Suma ExpA ExpA
