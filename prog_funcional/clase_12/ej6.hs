@@ -101,3 +101,5 @@ allPaths = foldM fc fn fb
 
                       fb _ dssl dssr = (map (Left_ :) dssl) ++ (map (Right_ :) dssr)
 
+-- objectsPerLevel :: Mapa a -> [[a]]
+-- Hay que unificar los elementos, ni idea cómo
