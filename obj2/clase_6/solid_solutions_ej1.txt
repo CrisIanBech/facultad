@@ -1,0 +1,7 @@
+1- Crear una clase abstracta "ConnectableEmailService" que implemente las interfaces de conexión y servicio de mail.
+2- Crear getters y poner variables como privadas.
+3- Separar esa interfaz en otra abstracción y no implementarla en ServidorPop.
+4- Separar la interfaz servidor de Servidor pop, en otras 3; una de conexión, otra de servicio de mail, y otra de servidor persé.
+5- Pedir el correo por parámetro; no se instanciará dentro de la misma.
+6- Crear una interfaz de EmailManager para delegarle el manejo de los mails.
+7 (extra) - Crear interfaz Authentication para sacarle la responsabilidad al EmailService de implementarla, violando el SRP.
