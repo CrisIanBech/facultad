@@ -1,0 +1,6 @@
+2-
+S: El banco solo gestiona los clientes. La clase CreditoManagerImpl gestiona los créditos del mismo.
+O: Se puede extender el comportamiento del banco mediante el CreditoManager.
+L: Lo cumplen las subclases de SolicitudDeCredito.
+I: Lo cumplen el Cliente con la interfaz Pagable, y la PropiedadInmobiliaria con Garantia.
+D: Se inyecta el CreditoManager en el banco.

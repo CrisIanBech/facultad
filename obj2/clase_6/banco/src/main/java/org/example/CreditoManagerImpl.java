@@ -5,18 +5,18 @@ import java.util.List;
 
 public class CreditoManagerImpl implements CreditoManager {
 
-    private List<SolicitudDeCredito> solicitudDeCreditos;
+    private List<SolicitudDeCredito> solicitudesDeCredito;
     private Banco banco;
 
 
     public CreditoManagerImpl(Banco banco) {
-        this.solicitudDeCreditos = new ArrayList<>();
+        this.solicitudesDeCredito = new ArrayList<>();
         this.banco = banco;
     }
 
     @Override
     public double montoSolicitudesAceptables() {
-        return solicitudDeCreditos.stream()
+        return solicitudesDeCredito.stream()
                 .filter(SolicitudDeCredito::esAceptable)
                 .mapToDouble(SolicitudDeCredito::getMontoSolicitado)
                 .sum();
@@ -24,7 +24,7 @@ public class CreditoManagerImpl implements CreditoManager {
 
     @Override
     public void registrarSolicitud(SolicitudDeCredito solicitudDeCredito) {
-        solicitudDeCreditos.add(solicitudDeCredito);
+        solicitudesDeCredito.add(solicitudDeCredito);
     }
 
     @Override

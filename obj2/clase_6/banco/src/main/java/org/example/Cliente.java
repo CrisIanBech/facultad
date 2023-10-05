@@ -23,6 +23,8 @@ public class Cliente implements Pagable {
         return direccion;
     }
 
+    public double getDineroDisponible() { return dineroDisponible; }
+
     public int getEdad() {
         return edad;
     }

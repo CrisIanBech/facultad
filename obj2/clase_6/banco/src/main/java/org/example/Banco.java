@@ -8,20 +8,23 @@ public class Banco {
     private CreditoManager creditoManager;
     private double dineroDisponible = 0;
 
+    public Banco() {
+        this.clientes = new ArrayList<>();
+    }
+
     public double getDineroDisponible() {
         return dineroDisponible;
     }
 
-    public Banco(CreditoManager creditoManager) {
+    public void setCreditoManager(CreditoManager creditoManager) {
         this.creditoManager = creditoManager;
-        this.clientes = new ArrayList<>();
     }
 
-    private void suscribirCliente(Cliente cliente) {
+    public void suscribirCliente(Cliente cliente) {
         clientes.add(cliente);
     }
 
-    private double dineroADesembolsar() {
+    public double dineroADesembolsar() {
         return creditoManager.montoSolicitudesAceptables();
     }
 
@@ -29,7 +32,7 @@ public class Banco {
         this.dineroDisponible = dineroDisponible;
     }
 
-    private void otorgarCredito(SolicitudDeCredito solicitudDeCredito) {
+    public void otorgarCredito(SolicitudDeCredito solicitudDeCredito) {
         creditoManager.registrarSolicitud(solicitudDeCredito);
         creditoManager.evaluarSolicitud(solicitudDeCredito);
     }
