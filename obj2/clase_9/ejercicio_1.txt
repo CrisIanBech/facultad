@@ -1,0 +1,3 @@
+1- Mediante el polimorfismo, teniendo una clase "Element" que desemboca en "Leaf" (componente atómico) y "Composite" (componente compuesto)
+2- En casos donde quiero tener una estructura compleja en forma de árbol, que permita agregar elementos y tener una operación en común.
+3- El polimorfismo y la encapsulación.

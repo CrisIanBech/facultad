@@ -1,0 +1,4 @@
+1- Que al entrar en loop, esto causaría un error de StackOverflow ya que se llama en loop la misma parcela.
+3- Se puede hacer calculándolo por parcela y dividiendolo en las mixtas, o guardandolo como estado al crear una instancia, representando la porción del espacio que ocupa y multiplicándolo por el precio del cultivo dado, o de las parcelas que lo componen.
+4- La operación de agregado y borrado lo debería de tener la interfaz por polimorfismo, para evitar casteos. En este caso lo puse en las mixtas para evitar problemas, lo cual es la segunda opción.
+5- Component = Parcela; Leaf = ParcelaCultivoSingular; Composite = ParcelaMixta; Component.operation() = Parcela.gananciaAnual();
