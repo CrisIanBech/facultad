@@ -1,13 +1,14 @@
 package org.example;
 
-public class Cultivo {
-    private final int gananciaAnual;
+public class Cultivo implements Parcela {
+    private int gananciaAnual;
 
     public Cultivo(int gananciaAnual) {
         this.gananciaAnual = gananciaAnual;
     }
 
-    public int getGananciaAnual() {
+    @Override
+    public double gananciaAnual() {
         return gananciaAnual;
     }
 }

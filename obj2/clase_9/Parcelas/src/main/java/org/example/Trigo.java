@@ -1,9 +1,8 @@
 package org.example;
 
 public class Trigo extends Cultivo {
-    private static final int GANANGIA_ANUAL = 300;
-
+    private static final int GANANCIA_ANUAL = 300;
     public Trigo() {
-        super(300);
+        super(GANANCIA_ANUAL);
     }
 }
