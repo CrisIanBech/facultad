@@ -1,0 +1,52 @@
+<mxfile host="Electron" modified="2023-10-23T02:25:01.128Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.6.8 Chrome/114.0.5735.289 Electron/25.5.0 Safari/537.36" etag="Q4HOIF-iQivuvBIRSIvW" version="21.6.8" type="device">
+  <diagram name="Página-1" id="9AbnjI_aeiaAKsnFs37k">
+    <mxGraphModel dx="742" dy="622" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="Q-KLfsTmpQGNMyLP758M-1" value="&amp;lt;&amp;lt;Interface&amp;gt;&amp;gt;&lt;br&gt;IShapeShifter" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="340" y="60" width="290" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="Q-KLfsTmpQGNMyLP758M-4" value="+ compose(IShapeShifter): IShapeShifter&lt;br&gt;+ deepest(): int&lt;br&gt;+ flat(): IShapeShifter&lt;br&gt;+ values(): List&amp;lt;Integer&amp;gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="Q-KLfsTmpQGNMyLP758M-1">
+          <mxGeometry y="40" width="290" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="Q-KLfsTmpQGNMyLP758M-5" value="ShapeShifterGroup" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="190" y="280" width="230" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="Q-KLfsTmpQGNMyLP758M-8" value="+ compose(IShapeShifter): IShapeShifter&lt;br&gt;+ deepest(): int&lt;br&gt;+ flat(): IShapeShifter&lt;br&gt;+ values(): List&amp;lt;Integer&amp;gt;&lt;br&gt;+ insertShapeShifter(IShapeShifter)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="Q-KLfsTmpQGNMyLP758M-5">
+          <mxGeometry y="26" width="230" height="84" as="geometry" />
+        </mxCell>
+        <mxCell id="Q-KLfsTmpQGNMyLP758M-9" value="shapeShifters" style="endArrow=block;endFill=1;html=1;align=left;verticalAlign=top;rounded=0;entryX=0.407;entryY=1.007;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.75;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="Q-KLfsTmpQGNMyLP758M-5" target="Q-KLfsTmpQGNMyLP758M-4">
+          <mxGeometry x="0.0223" y="3" relative="1" as="geometry">
+            <mxPoint x="260" y="280" as="sourcePoint" />
+            <mxPoint x="440" y="190" as="targetPoint" />
+            <mxPoint y="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Q-KLfsTmpQGNMyLP758M-10" value="*" style="edgeLabel;resizable=0;html=1;align=left;verticalAlign=bottom;" connectable="0" vertex="1" parent="Q-KLfsTmpQGNMyLP758M-9">
+          <mxGeometry x="-1" relative="1" as="geometry">
+            <mxPoint x="58" y="-80" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Q-KLfsTmpQGNMyLP758M-12" value="" style="endArrow=block;dashed=1;endFill=0;endSize=12;html=1;rounded=0;exitX=0.367;exitY=-0.024;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.062;entryY=1.077;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="Q-KLfsTmpQGNMyLP758M-5" target="Q-KLfsTmpQGNMyLP758M-4">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="330" y="200" as="sourcePoint" />
+            <mxPoint x="490" y="200" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Q-KLfsTmpQGNMyLP758M-13" value="ShapeShifterNode" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="530" y="280" width="230" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="Q-KLfsTmpQGNMyLP758M-14" value="+ &lt;u&gt;new(Integer)&lt;/u&gt;&lt;br&gt;+ compose(IShapeShifter): IShapeShifter&lt;br&gt;+ deepest(): int&lt;br&gt;+ flat(): IShapeShifter&lt;br&gt;+ values(): List&amp;lt;Integer&amp;gt;&lt;br&gt;+ insertShapeShifter(IShapeShifter)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="Q-KLfsTmpQGNMyLP758M-13">
+          <mxGeometry y="26" width="230" height="94" as="geometry" />
+        </mxCell>
+        <mxCell id="Q-KLfsTmpQGNMyLP758M-16" value="" style="endArrow=block;dashed=1;endFill=0;endSize=12;html=1;rounded=0;entryX=0.639;entryY=1.021;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="Q-KLfsTmpQGNMyLP758M-13" target="Q-KLfsTmpQGNMyLP758M-4">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="410" y="290" as="sourcePoint" />
+            <mxPoint x="570" y="290" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
