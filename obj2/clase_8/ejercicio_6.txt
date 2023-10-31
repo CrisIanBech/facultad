@@ -1,0 +1,32 @@
+1- Está el adapter que es una tercera clase que conecta las otras dos. Después está el adapter que es la propia clase a adaptar, pero implementa la otra interfaz
+para poder ser vista como ese tipo.
+2- Uno usa composición para ser intermediario en la llamada de los métodos, y el otro implementa la interfaz para llamar a los métodos desde la propia clase.
+3- El primero siempre se puede. El segundo solo se puede si el Adaptee es una interfaz. Caso contrario se tendrían dos superclases, cosa no permitida en Java, la multiherencia.
+4- Adaptee: Vector. Adapter: Enumeration. Target: Adapter. Es del tipo de herencia. Te deja usar la estructura de este dato, como si fuera un Enumeration, lo que permite la iteración de forma genérica.
+5- Adaptee: ArrayList. Adapter: Iterator. Target: Iterator. Es del tipo de herencia.
+6-
+import java.util.Enumeration;
+import java.util.Iterator;
+
+public class IteratorAdapter<E> implements Enumeration<E> {
+    Iterator<E> iteratorAdaptee;
+
+    public IteratorAdapter(Iterator<E> iteratorAdaptee) {
+        this.iteratorAdaptee = iteratorAdaptee;
+    }
+
+    @Override
+    public boolean hasMoreElements() {
+        return iteratorAdaptee.hasNext();
+    }
+
+    @Override
+    public E nextElement() {
+        return iteratorAdaptee.next();
+    }
+
+    @Override
+    public Iterator<E> asIterator() {
+        return iteratorAdaptee;
+    }
+}
