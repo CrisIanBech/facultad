@@ -1,0 +1,61 @@
+<mxfile host="Electron" modified="2023-11-01T01:34:16.218Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.6.8 Chrome/114.0.5735.289 Electron/25.5.0 Safari/537.36" etag="EXTQrXY2LyoLIVQ13md1" version="21.6.8" type="device">
+  <diagram name="Página-1" id="o2uwyLKSAHvmXamSf9Sa">
+    <mxGraphModel dx="781" dy="692" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="IhoUQ8oSu-Og-6y35Rfh-1" value="EncriptadorNaive" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="200" y="80" width="240" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="IhoUQ8oSu-Og-6y35Rfh-4" value="+ encriptar(String): String&lt;br&gt;+ desencriptar(String): String&lt;br&gt;+ setEncryptStrategy(EncryptStrategy)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="IhoUQ8oSu-Og-6y35Rfh-1">
+          <mxGeometry y="26" width="240" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="IhoUQ8oSu-Og-6y35Rfh-6" value="&amp;lt;&amp;lt;Interface&amp;gt;&amp;gt;&lt;br&gt;EncripterStrategy" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=40;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="220" y="340" width="180" height="84" as="geometry" />
+        </mxCell>
+        <mxCell id="IhoUQ8oSu-Og-6y35Rfh-7" value="+ encriptar(String): String&lt;br&gt;+ desencriptar(String): String" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="IhoUQ8oSu-Og-6y35Rfh-6">
+          <mxGeometry y="40" width="180" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="IhoUQ8oSu-Og-6y35Rfh-10" value="encryptStrategy" style="endArrow=block;endFill=1;html=1;align=left;verticalAlign=top;rounded=0;exitX=0.444;exitY=1.05;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="IhoUQ8oSu-Og-6y35Rfh-4" target="IhoUQ8oSu-Og-6y35Rfh-6">
+          <mxGeometry x="-1" y="14" relative="1" as="geometry">
+            <mxPoint x="350" y="290" as="sourcePoint" />
+            <mxPoint x="510" y="290" as="targetPoint" />
+            <mxPoint x="-1" y="-3" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="IhoUQ8oSu-Og-6y35Rfh-11" value="1" style="edgeLabel;resizable=0;html=1;align=left;verticalAlign=bottom;" connectable="0" vertex="1" parent="IhoUQ8oSu-Og-6y35Rfh-10">
+          <mxGeometry x="-1" relative="1" as="geometry">
+            <mxPoint x="-17" y="147" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="IhoUQ8oSu-Og-6y35Rfh-12" value="EncriptadorNumerico" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="110" y="520" width="170" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="IhoUQ8oSu-Og-6y35Rfh-15" value="+ encriptar(String): String&lt;br&gt;+ desencriptar(String): String" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="IhoUQ8oSu-Og-6y35Rfh-12">
+          <mxGeometry y="26" width="170" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="IhoUQ8oSu-Og-6y35Rfh-16" value="EncriptadorVocales" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="350" y="520" width="170" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="IhoUQ8oSu-Og-6y35Rfh-17" value="+ encriptar(String): String&lt;br&gt;+ desencriptar(String): String" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="IhoUQ8oSu-Og-6y35Rfh-16">
+          <mxGeometry y="26" width="170" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="IhoUQ8oSu-Og-6y35Rfh-20" value="" style="endArrow=block;dashed=1;endFill=0;endSize=12;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.433;entryY=1.046;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="IhoUQ8oSu-Og-6y35Rfh-12" target="IhoUQ8oSu-Og-6y35Rfh-7">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="280" y="450" as="sourcePoint" />
+            <mxPoint x="440" y="450" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="IhoUQ8oSu-Og-6y35Rfh-21" value="" style="endArrow=block;dashed=1;endFill=0;endSize=12;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.591;entryY=1.069;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="IhoUQ8oSu-Og-6y35Rfh-16" target="IhoUQ8oSu-Og-6y35Rfh-7">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="200" y="530" as="sourcePoint" />
+            <mxPoint x="305" y="437" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="IhoUQ8oSu-Og-6y35Rfh-22" value="Text" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="621" y="285" width="40" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
