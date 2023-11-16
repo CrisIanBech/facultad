@@ -30,6 +30,7 @@ class JugadaTest {
         segundaJugada = new Jugada(Combinacion.Nada, primeraCarta, segundaCarta, terceraCarta, cuartaCarta, quintaCarta);
     }
 
+        @A
     @Test
     public void testPoquerGanaColor() {
         primeraJugada = new Jugada(Combinacion.Poquer, primeraCarta, segundaCarta, terceraCarta, cuartaCarta, quintaCarta);

@@ -3,9 +3,10 @@ package org.example;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class PokerStatusTest {
 
@@ -64,6 +65,8 @@ class PokerStatusTest {
         when(cuartaCarta.getValor()).thenReturn(ValorCarta.DIEZ);
         when(quintaCarta.getValor()).thenReturn(ValorCarta.CINCO);
 
+        when(primeraCarta.compareTo(any(Carta.class)));
+        
         assertEquals(Combinacion.Trio, PokerStatus.verificar(primeraCarta, segundaCarta, terceraCarta, cuartaCarta, quintaCarta).getCombinacion());
     }
 

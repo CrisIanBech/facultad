@@ -1,7 +1,9 @@
 package org.example;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GestorQyA {
 
@@ -10,6 +12,9 @@ public class GestorQyA {
 
     public GestorQyA() {
         this.jugadores = new ArrayList<>();
+        List<String> listlists = new ArrayList<String>();
+        listlists.stream().max(String::compareTo).get();
+
     }
 
     public void agregarJugadorQyA(JugadorQyA jugador) {

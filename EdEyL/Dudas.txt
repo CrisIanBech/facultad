@@ -1,0 +1,2 @@
+Nombre de procedimientos, poner descripciones detalladas
+Dudas sobre celda inicial al escribir un procedimiento y al escribir un programa
