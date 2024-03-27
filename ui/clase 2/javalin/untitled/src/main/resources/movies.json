@@ -1,0 +1,170 @@
+[
+  {
+    "title": "El Padrino",
+    "description": "La historia de la poderosa familia Corleone y cómo Michael, el hijo menor, se ve obligado a tomar el control del imperio criminal familiar.",
+    "releaseDate": "1972-03-24",
+    "actors": [
+      "Marlon Brando",
+      "Al Pacino",
+      "James Caan"
+    ],
+    "directors": [
+      "Francis Ford Coppola"
+    ],
+    "rating": 9.2
+  },
+  {
+    "title": "12 Angry Men",
+    "description": "Un jurado de 12 hombres debe decidir el destino de un joven acusado de asesinato. La película explora los temas de la justicia, la duda razonable y el prejuicio.",
+    "releaseDate": "1957-04-10",
+    "actors": [
+      "Henry Fonda",
+      "Lee J. Cobb",
+      "Martin Balsam"
+    ],
+    "directors": [
+      "Sidney Lumet"
+    ],
+    "rating": 8.9
+  },
+  {
+    "title": "La lista de Schindler",
+    "description": "Oskar Schindler, un empresario alemán, arriesga su vida para salvar a más de mil judíos del Holocausto durante la Segunda Guerra Mundial.",
+    "releaseDate": "1993-12-15",
+    "actors": [
+      "Liam Neeson",
+      "Ben Kingsley",
+      "Ralph Fiennes"
+    ],
+    "directors": [
+      "Steven Spielberg"
+    ],
+    "rating": 8.9
+  },
+  {
+    "title": "El Señor de los Anillos: El Retorno del Rey",
+    "description": "La épica conclusión de la trilogía de El Señor de los Anillos, en la que Frodo Bolsón y sus compañeros emprenden un viaje para destruir el Anillo Único.",
+    "releaseDate": "2003-12-17",
+    "actors": [
+      "Elijah Wood",
+      "Ian McKellen",
+      "Viggo Mortensen"
+    ],
+    "directors": [
+      "Peter Jackson"
+    ],
+    "rating": 8.9
+  },
+  {
+    "title": "Pulp Fiction",
+    "description": "Una serie de historias entrecruzadas que exploran el mundo del crimen organizado en Los Ángeles.",
+    "releaseDate": "1994-10-14",
+    "actors": [
+      "John Travolta",
+      "Samuel L. Jackson",
+      "Uma Thurman"
+    ],
+    "directors": [
+      "Quentin Tarantino"
+    ],
+    "rating": 8.9
+  },
+  {
+    "title": "El bueno, el feo y el malo",
+    "description": "Tres pistoleros se embarcan en una búsqueda del tesoro durante la Guerra Civil Americana.",
+    "releaseDate": "1966-12-29",
+    "actors": [
+      "Clint Eastwood",
+      "Lee Van Cleef",
+      "Eli Wallach"
+    ],
+    "directors": [
+      "Sergio Leone"
+    ],
+    "rating": 8.8
+  },
+  {
+    "title": "El club de la lucha",
+    "description": "Un hombre desilusionado con la sociedad moderna forma un club de lucha clandestino con un vendedor de jabón.",
+    "releaseDate": "1999-10-15",
+    "actors": [
+      "Brad Pitt",
+      "Edward Norton",
+      "Helena Bonham Carter"
+    ],
+    "directors": [
+      "David Fincher"
+    ],
+    "rating": 8.8
+  },
+  {
+    "title": "El silencio de los corderos",
+    "description": "Una joven agente del FBI en prácticas busca la ayuda de un caníbal encarcelado para atrapar a un asesino en serie.",
+    "releaseDate": "1991-02-01",
+    "actors": [
+      "Jodie Foster",
+      "Anthony Hopkins",
+      "Scott Glenn"
+    ],
+    "directors": [
+      "Jonathan Demme"
+    ],
+    "rating": 8.6
+  },
+  {
+    "title": "2001: Odisea del espacio",
+    "description": "Un equipo de astronautas emprende una misión a Júpiter para investigar una misteriosa monolita negra.",
+    "releaseDate": "1968-04-02",
+    "actors": [
+      "Keir Dullea",
+      "Gary Lockwood",
+      "William Sylvester"
+    ],
+    "directors": [
+      "Stanley Kubrick"
+    ],
+    "rating": 8.3
+  },
+  {
+    "title": "Star Wars: Episodio IV - Una nueva esperanza",
+    "description": "Un grupo de rebeldes lucha contra el malvado Imperio Galáctico en una galaxia muy, muy lejana.",
+    "releaseDate": "1977-05-25",
+    "actors": [
+      "Mark Hamill",
+      "Harrison Ford",
+      "Carrie Fisher"
+    ],
+    "directors": [
+      "George Lucas"
+    ],
+    "rating": 8.6
+  },
+  {
+    "title": "El padrino: Parte II",
+    "description": "La historia de Michael Corleone mientras expande el imperio familiar y se enfrenta a nuevos desafíos.",
+    "releaseDate": "1974-12-20",
+    "actors": [
+      "Al Pacino",
+      "Robert De Niro",
+      "Diane Keaton"
+    ],
+    "directors": [
+      "Francis Ford Coppola"
+    ],
+    "rating": 9.0
+  },
+  {
+    "title": "Lawrence de Arabia",
+    "description": "La historia de T.E. Lawrence, un oficial británico que se une a la revuelta árabe contra el Imperio Otomano durante la Primera Guerra Mundial.",
+    "releaseDate": "1962-12-10",
+    "actors": [
+      "Peter O'Toole",
+      "Alec Guinness",
+      "Anthony Quinn"
+    ],
+    "directors": [
+      "David Lean"
+    ],
+    "rating": 8.3
+  }
+]
