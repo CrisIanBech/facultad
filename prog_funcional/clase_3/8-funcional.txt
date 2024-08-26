@@ -1,0 +1,36 @@
+a. (Int -> Int) -> (Int -> Int)
+(Int -> Int) -> Int -> Int
+1. Es una función que toma una función que toma un Int y devuelve un Int, y devuelve una función que toma un Int y devuelve un Int
+2. Es una función que toma una función que toma un Int y devuelve un Int, y un Int y devuelve un Int
+b. (a -> (b -> c)) -> (a -> b) -> c
+(a -> b -> c) -> a -> b -> c
+1. Es una función que toma un a y devuelve una función que devuelve una función que toma un tipo b y devuelve un tipo c, que devuelve una función que toma un tipo a y devuelve una función que toma un tipo b y devuelve un tipo c.
+2. Es una función que toma una función que recibe un tipo a y un tipo b y devuelve un tipo c, y toma un tipo a, un tipo b y devuelve un tipo c
+c. (a -> b, c -> d) -> ((a, c) -> (b, d))
+(a -> b, c -> d) -> (a, c) -> (b, d)
+1. Es una función que recibe una tupla de una función que recibe a y devuelve b y una función que recibe c y devuelve d, y devuelve una función que recibe una tupla de tipo a y c y devuelve una tupla de tipo b y d
+2. Es una función que recibe una tupla de tipo funcion que recibe a y devuelve b y una que función que recibe un tipo c y devuelve un tipo d, y una tupla de tipo a y c y devuelve una tupla de tipo b y d
+d. ((a, a) -> b) -> (a -> b)
+((a, a) -> b) -> a -> b
+1. Es una función que recibe una tupla de a en a y devuelve una tipo b, que devuelve una función que recibe un tipo a y devuelve un tipo b
+2. Es una función que recibe una tupla de a en a y devuelve b, y un tipo a, y devuelve b
+e. (a -> (b -> c)) -> (b -> (a -> c))
+(a -> (b -> c)) -> b -> a -> c
+1. Es una función que recibe un tipo a y devuelve una funcion que recibe un tipo b y devuelve un tipo c, y devuelve una función que toma un tipo b y devuelve una funcion que recibe un tipo a y devuelve un tipo c
+2. Es una función que recibe una función que recibe un tipo a y b y devuelve un tipo c, un tipo b y un tipo a, y devuelve un tipo c
+f. (a -> b) -> ((a, a) -> (b, b))
+(a -> b) -> (a, a) -> (b, b)
+1. Es una función que recibe un tipo a y devuelve un tipo b, que devuelve una función que toma una tupla de tipo a, y devuelve una tupla de tipo b
+2. Es una función que recibe una función que toma a y devuelve b, y toma una tupla de tipo a, y devuelve una tupla de tipo b.
+g. (a -> b, a -> c) -> (a -> (b, c))
+(a -> b, a -> c) -> a -> (b, c)
+1. Es una función que recibe una tupla de función que toma un tipo a y devuelve un tipo b, y una función que toma un tipo a y devuelve un tipo c, y devuelve una función que recibe un tipo a y devuelve una tupla de tipo b y c.
+2. Es una función que toma una tupla de una función que toma un tipo a y devuelve un tipo b, y toma un tipo a y devuelve un tipo c, y toma un tipo a y devuelve una tupla de tipo b y c.
+h. (a -> (b -> c)) -> ((a -> b) -> (a -> c))
+(a -> b -> c) -> (a -> b) -> a -> c
+ 1. Es una función que recibe un tipo a y devuelve una función que recibe un tipo b y devuelve un tipo c, que devuelve una función que recibe un tipo a y devuelve un tipo b, que devuelve una función que toma un tipo a y devuelve un tipo c
+2. Es una función que recibe una función que toma a y b y devuelve c, y una función que toma a y devuelve b, que también recibe a, y devuelve c
+i. a -> (b -> a)
+a -> b -> a
+1. Es una función que recibe un tipo a y devuelve una función que toma un tipo b y devuelve un tipo a.
+2. Es una función que toma un tipo a y un tipo b y devuelve un tipo a 
