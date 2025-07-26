@@ -1,0 +1,340 @@
+/*
+
+Ejercicio 1 *
+    A la orilla de un río se encuentra un granjero junto a un lobo, una oveja y un repollo. El granjero desea cruzar los animales a la
+    orilla opuesta con su bote. En el bote solo puede cargarse uno de los tres y si el lobo se queda solo con la oveja la come, así como
+    ésta lo hace con el repollo al no estar el granjero. Programar un algoritmo por backtracking que permita resolver el problema
+    como una secuencia de acciones a ser realizadas por el granjero. Para eso:
+    • modele un estado del problema (situaciones antes o después de las acciones del granjero),
+    • identifique los problemas hijos (o soluciones extendidas) y las condiciones de corte (o poda),
+    • programe la función recursiva que realiza el backtracking y
+    • realice la primera llamada a esta función para resolver el problema
+
+*/
+
+- Tengo dos orillas
+- Solo puedo llevar de a uno a la vez
+- Si el lobo se queda con la oveja, pierdo
+- Si la oveja se queda con el repollo, pierdo
+- La condicion de corte debería de ocurrir cuando se quedan el lobo y la oveja juntos, o el repollo y la oveja juntos
+
+type orilla = 1 | 0
+let izquierda = 1
+let derecha = 0
+
+let orillasFormatted = ["derecha", "izquierda"]
+
+fun problemaAnimales(orilla) {
+    let orilla = 0
+    let oveja = 0
+    let lobo = 0
+    let repollo = 0
+    let stack = Stack()
+
+    const encontroSolucion = problemaAnimalesRec(orilla, oveja, lobo, repollo, stack, false, false, false, false)
+
+    if(!encontroSolucion) return println("No hay solución")
+
+    while(!stack.isEmpty()) {
+        println(stack.pop())
+    }
+}
+
+// Uso un stack para imprimir los resultados en el orden inverso. La función devuelve el stack y si se encontró solución.
+// En cada nivel, agrego el paso solo si encontré solución
+// Se puede hacer funcional el stack, pero queda feo el código porque tendria que tener if's anidados. Debería de devolver el stack + si encontró solución.
+
+//   G  R  O  L
+    [1, 1, 1, 1] = estado.first()
+
+// Primera orilla = [1, 1, 1, 1]
+// Segunda orilla = [0, 0, 0, 0]
+
+const izquierda = 0
+const derecha = 1
+
+const granjero = 0
+const repollo = 1
+const oveja = 2
+const lobo = 3
+
+fun problemaAnimales(estados) {
+    const ultimoEstado = estados[estados.length - 1]
+    if(ultimoEstado[derecha] == [1, 1, 1, 1]) return estados // listo
+
+    for(i in range(0 until 3)) {
+        int granjeroOrilla = if(ultimoEstado[izquierda][granjero] == 1) izquierda else derecha
+        const izq = [...ultimoEstado[izquierda]]
+        const der = [...ultimoEstado[derecha]]
+        izq[granjero] = (ultimoEstado[izquierda][granjero] + 1) % 2
+        der[granjero] = (ultimoEstado[derecha][granjero] + 1) % 2
+        izq[i] = (ultimoEstado[izquierda][i] + 1) % 2
+        der[i] = (ultimoEstado[derecha][i] + 1) % 2
+        if(ultimoEstado[granjeroOrilla][i] == 1 && esPosible(estados, [izq, der])) { // Estoy en el mismo, por ende puedo moverlo. Hago poda.
+            const rec = problemaAnimales([...estados, [izq, der]])
+            if(rec[rec.length - 1][derecha] == [1, 1, 1, 1]) return rec // Conseguí llegar
+        }
+    }
+
+    return estados
+}
+
+fun esPosible(estados, estado) {
+    if(estados.any(estadosCalculados => estadosCalculados[izquierda] == estado[izquierda] || estadosCalculados[derecha] == estado[derecha])) return false
+
+    const granjero = estado[izquierda][granjero]
+    const lobo = estado[izquierda][lobo]
+    const oveja = estado[izquierda][oveja]
+    const repollo = estado[izquierda][repollo]
+
+    if(oveja == lobo && repollo == lobo) return true; // Caso inicial, si están los 3 significa que no viajé con ninguno
+    if(oveja == lobo && granjero != lobo) return false; // No pueden estar la oveja y el lobo sin estar yo
+    if(oveja == repollo && granjero != repollo) return false; // No pueden estar la oveja y el repollo sin estar yo
+}
+
+// Ejercicio 2
+
+/*
+
+    Programe una solución para el problema de Sudoku. Su entrada es una tabla con las casillas que ya están completas y su valor
+asociado (suponemos que la entrada es válida en el sentido de que las casillas llenas no presentan incompatibilidades)
+
+*/
+
+fun resolverSudoku(sudoku: Int[][], i, j) {
+    if(i === sudoku.length - 1 && j == sudoku[0].length - 1) {
+        imprimirSolucion(sudoku)
+        return true
+    }
+
+    const value = sudoku[i][j]
+    const proxColumna = (i + 1) % sudoku.length
+    const proxFila = if(proxColumna == 0) j + 1 else j
+
+    const esInicial = value != -1
+    if(esInicial) {
+        // El valor ya vino por defecto, voy a la próxima celda
+        return resolverSudoku(sudoku, proxColumna, proxFila)
+    }
+
+    // Pruebo las combinaciones hasta que encuentre una
+    for(int n = 0; n < sudoku.length; n++) {
+        if(esPosibleSolucion(sudoku, i, j, n)) { // Podo las ramas que no son posibles soluciones
+            sudoku[i][j] = n
+            if(resolverSudoku(sudoku, proxColumna, proxFila)) {
+                return true // Retorno si se encontró solución
+            }
+        }
+    }
+
+    if(!esInicial) { sudoku[i][j] = -1 } // Reseteo el valor para que la próxima iteración sepa que no es inicial
+    return false // Caso donde no se puede resolver. Vuelvo una iteración atrás si es posible.
+}
+
+fun esPosibleSolucion(sudoku: Int[][], i, j, n) {
+    for(m in range(0..9)) {
+        if(sudoku[m][j]) return false
+    }
+
+    for(m in range(0..9)) {
+        if(sudoku[i][m]) return false
+    }
+
+    return true
+}
+
+fun imprimirSolucion(sudoku) {
+    // ...
+}
+
+// Ejercicio 3
+
+// A
+
+/*
+    Generar las permutaciones de una lista por backtracking.
+*/
+
+fun permutaciones(lista: List<T>) {
+    const soluciones: List<List<T>> = []
+    for(elemento in lista) {
+        soluciones.appendAll(permutaciones'(lista, [elemento]))
+    }
+    return soluciones
+}
+
+fun permutaciones'(lista, combinacion) { // lista = [5, 4, 3, 2, 1]
+    if(lista.length == combinacion.length) return [combinacion];
+    
+    const combinaciones = []
+
+    for(elemento in lista) { [5, 4, 3, 2, 1]
+        if(elemento not in combinacion) { // Podo las ramas que repiten combinaciones
+            combinaciones.appendAll(permutaciones'(lista, [...combinacion, elemento]))
+        }
+    }
+
+    return combinaciones.filter(it => !it.isEmpty()) // Filtro los arrays vacíos porque sino se crean casos extra
+}
+
+
+// B
+
+fun problemaViajante'(ciudades: List<String>, costos, costo, visitadas: List<String>, aVisitar: List<String>): List<Pair<Int, List<String>>> {
+    if(visiteTodas(visitadas, aVisitar)) {
+        const ultimaCiudad = visitadas[visitadas.lengt - 1]
+        const caminoAlInicio = caminoAlInicio(ciudades, costos, costo, visitadas, [ultimaCiudad], visitadas[0])
+        return caminoAlInicio
+    }
+    
+    const posibilidades = []
+
+    for(ciudad in ciudades) {
+        if(ciudad not in visitadas) { // Realizo poda de permutaciones repetidas
+            const costoActual = if(visitadas.length == 0) 0 else costo(costos, visitadas[visitadas.length - 1], ciudad) // Costo de este mas la anterior ciudad
+            posibilidades.add(problemaViajante'(ciudades, costos, costo + costoActual, [...visitadas, ciudad], [], aVisitar))
+        }
+    }
+
+    return min(posibilidades, posibilidades::first)
+}
+
+fun caminoAlInicio(ciudades, costos, costo, camino, visitadas, destino) {
+    if(destino in visitadas) {
+        return [costo, visitadas]
+    }
+
+    const posibilidades = []
+
+    for(ciudad in ciudades) {
+        if(ciudad not in visitadas) { // Realizo poda de permutaciones repetidas
+            const costoActual = costo(costos, camino[camino.length - 1], ciudad)
+            posibilidades.append(caminosAlDestino(ciudades, costos, costo + costoActual, [...camino, ciudad], [...visitadas, ciudad], destino))
+        }
+    }
+
+    return min(posibilidades, posibilidades::first)
+}
+
+fun visiteTodas(visitadas: List<String>, aVisitar: List<String>) {
+    return aVisitar.isSubsetOf(visitadas)
+}
+
+fun costo(costos, primeraCiudad: string, segundaCiudad: string): Int // Función con alguna lógica para definirlo en base a los costos y ciudades provistas
+
+// Ej 4
+
+// A
+
+fun conjuntoDePartes(conjunto: List<T>) {
+    const conjuntoDePartes = conjuntoDePartes'(conjunto, [[], conjunto]) // La lista debe ser mutable para que funcione. Inicio con lista vacía para que no repita y el conjunto general.
+    return conjuntoDePartes
+}
+
+fun conjuntoDePartes'(conjunto: List<T>, conjuntoDePartes: List<T>) {
+    if(conjunto.length == 0) return [] // No tengo mas elementos para combinar
+
+    for(i in range (0..conjunto.length)) {
+        if(not conjuntoDePartes.contains(conjunto - conjunto[i])) { // Si ya lo contiene significa que otra rama desarrolló todas las posibilidades al no importar el orden en un conjunto. Esta es la poda.
+            conjuntoDePartes.add(conjunto - conjunto[i])
+            conjuntoDePartes'(conjunto - conjunto[i], conjuntoDePartes) // Se puede hacer funcional si reasigno el conjunto de partes con el resultado de cada iteración y lo paso en la siguiente
+        }
+    }
+}
+
+// B 
+
+// Se puede resolver si se hace una sumatoria de 0 a N, pero el ejercicio pide hacerlo con backtracking
+/*  Mediante los bits se puede representar la ausencia o presencia de un número.
+    Por ejemplo. { 1, 3, 4 } se puede representar con el numero 111. El subconjunto { 1, 4 } se representa con el número 101. 
+    Es importante recalcar que esto solo sirve si los elementos están ordenados de menor a mayor o mayor a menor.
+    Entonces, el elemento conjunto[i] está presente solo si numero[i] == 1
+*/
+
+fun subconjuntoDeNumeros(conjunto: int, conjuntoDePartes) { //  Ej, conjunto = 15, tengo 4 bits y 4 elementos. 15 = conjunto completo. * conjunto % 2 == 0
+    if(conjunto == 0) return 0
+
+    const repeticiones = log(base = 2, conjunto)
+    for(i in range(0 .. repeticiones)) {
+        const valueBit = conjunto[i]
+        const single = pow(2, i)
+        const subconjunto = conjunto - single
+        if(valueBit == 1 && subconjunto not in conjuntoDePartes) { //  No repito los que ya repetí
+            conjuntoDePartes.add(subconjunto)
+            subconjuntoDeNumeros(subconjunto, conjuntoDePartes)
+        }
+    }
+}
+
+// C
+
+fun saco(costos: List<int>, pesos: List<int>, capacidad: int) {
+    if(peso == 0) return 0
+ 
+    var max = 0
+
+    for(i in range(0..costos.length)) {
+        const peso = pesos[i]
+        const costo = costos[i]
+        if(capacidad - peso >= 0) { // Poda
+            max = costo + saco(costos, pesos, capacidad - peso)
+        }
+    }
+
+    return max
+}
+
+// 5
+
+/*
+
+    Sea M ∈ Bm×n una matriz de booleanos. Se desea obtener el camino más corto que empiece en la casilla superior izquierda
+    ([1, 1]), termine en la casilla inferior derecha ([m, n]), y tal que tan solo pase por casillas de valor True. En cada casilla [i, j] hay
+    cuatro movimientos posibles (siempre que la dimensión de la matriz lo permita):
+    • ir hacia abajo (a la casilla [i + 1, j])
+    • ir hacia la derecha (a la casilla [i, j + 1])
+    • ir hacia arriba (a la casilla [i − 1, j])
+    • ir hacia la izquierda (a la casilla [i, j − 1])
+    a. Diseñar un algoritmo basado en backtracking que resuelva este problema.
+    b. Determinar la complejidad del algoritmo propuesto.
+
+*/
+
+[   [   1, 2, 3, 4, 5  ], 
+    [   6, 7, 8, 9, 10 ]]
+
+
+// Si voy por un camino que ya crucé, debería de hacer una poda si ya pasé antes por ese, con un camino mas corto.
+// Por ende, debo guardar el costo minimo de haber llegado a cada celda.
+// - Si llegué con menos, sigo. Si no, no sigo.
+// - Si es false, no sigo.
+
+const movimientos = [[-1, 0]. [1, 0], [0, -1], [0, 1]]
+
+fun caminoEficiente(matriz, visitados, i, j, costo): Pair<int, List<Pair<int, int>> {
+    if(matriz.length - 1 == i && matriz[0].length == j) return visitados // Caso base, llego al final
+
+    const caminos = [] 
+
+    for(movimiento in movimientos) {
+        const toI = i + movimiento[0]
+        const toJ = j + movimiento[1]
+        if(puedoMover(i, j, matriz, toI, toJ, camino)) {
+            caminos.add(caminoEficiente(matriz, [...visitados, [toI, toj]], toI, toJ, costo + 1))    
+        }
+    }
+
+    return caminos.filter(camino => {
+        const movimientos = camino[1]
+        const ultimo = movimientos[movimientos.length - 1]
+        return ultimo[0] == movimientos.length - 1 && ultimo[1] == movimientos[0].length - 1
+    }).min(camino => camino[0]).getOrDefault([Int.infinity, [0, 0]]) // Filtro los que llegan al final ya que no sé solamente con el costo si llegan, solo si el ultimo movimiento es abajo a la derecha.
+
+}
+
+fun puedoMover(i, j, matriz, toI, toJ, camino) {
+    return toI in range (0 until matriz.length - 1) && toJ in range(0 until matriz[0].length - 1) && camino[toI][toJ] && [toI, toJ] not in camino
+}
+
+// B
+// Debido a que por cada celda y cada camino se bifurca en 4 opciones, donde decido si tomar un camino o no, su costo es O(4^N*M)

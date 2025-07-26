@@ -1,0 +1,72 @@
+// Ejercicio 1
+
+fun numerarBFS(Array<Pair<int, List<int>>> grafo) {
+    int numero = 0
+    Queue porVer = Queue()
+    Array<Boolean> visitados = arrayOfLength(grafo.length, default: false)
+    Array<int> numerados = arrayOfLength(grafo.length, default: 0)
+    if(grafo.length > 0) porVer.enqueue(grafo[0])
+    while(porVer.hasElements()) {
+        Pair<int, List<int>> nodo = porVer.dequeue()
+        numerados[nodo.first()] = numero++
+        for(vecino in nodo.second()) {
+            if(!visitados[vecino]) porVer.enqueue(grafo[vecino])
+        }
+    }
+    return numerados
+}
+
+fun numerarDFS(Array<Pair<int, List<int>>> grafo) {
+    int numero = 0
+    Stack porVer = Stack()
+    Array<Boolean> visitados = arrayOfLength(grafo.length, default: false)
+    Array<int> numerados = arrayOfLength(grafo.length, default: 0)
+    if(grafo.length > 0) porVer.enqueue(grafo[0])
+    while(porVer.hasElements()) {
+        Pair<int, List<int>> nodo = porVer.dequeue()
+        numerados[nodo.first()] = numero++
+        for(vecino in numerados.second()) {
+            if(!visitados[vecino]) porVer.enqueue(grafo[vecino])
+        }
+    }
+    return numerados
+}
+
+// Ejercicio 2
+
+fun dfsArbolGenerador(Array<Array<int>> grafo) {
+    Stack porVisitar = Stack()
+    Array<int> visitados = arrayOfLength(grafo.length, default: false)
+    if(grafo.length > 0) { porVisitar.push(0); visitados[0] = true }
+    while(porVisitar.hasElements()) {
+        int nodo = porVisitar.pop()
+        for(int i = grafo.length - 1; i >= 0; i--) {
+            if(grafo[nodo][i] == 1 && !visitados[i]) {
+                visitados[i] = true
+                porVisitar.push(i)
+            } else {
+                grafo[nodo][i] = 0 // Elimino asimétricamente porque eventualmente voy a borrarlo del otro lado
+            }
+        }
+    }
+    return grafo
+}
+
+fun bfsArbolGenerador(Array<Array<int>> grafo) {
+    Queue porVisitar = Queue()
+    Array<int> visitados = arrayOfLength(grafo.length, default: false)
+    if(grafo.length > 0) { porVisitar.enqueue(0); visitados[0] = true }
+    while(porVisitar.hasElements()) {
+        int nodo = porVisitar.dequeue()
+        for(int i = grafo.length - 1; i >= 0; i--) {
+            if(grafo[nodo][i] == 1 && !visitados[i]) {
+                visitados[i] = true
+                porVisitar.enqueue(i)
+            } else {
+                grafo[nodo][i] = 0 // Elimino asimétricamente porque eventualmente voy a borrarlo del otro lado
+            }
+        }
+    }
+    return grafo
+}
+

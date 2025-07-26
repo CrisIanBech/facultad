@@ -1,0 +1,169 @@
+// 1
+
+// Agarra el que termina primero
+fun cronogramar(actividades: List<Pair<int, int>) {
+    const acts = actividades.sort(act => act.second())
+
+    const cronograma = []
+
+    if(acts.length > 0) {
+        cronograma.append(acts[0])
+
+        for(i = 1; i < acts.length; i++) {
+            const item = acts[i]
+            if(item.first() >= cronograma[i - 1].second()) { // Si empieza después de que termine la ultima
+                cronograma.pushEnd(item)
+            }
+        }
+    }
+
+    return cronograma
+}
+
+// A
+
+// Agarra el que empieza ultimo
+fun cronogramar(actividades: List<Pair<int, int>) {
+    const acts = actividades.sort(act => act.second(), -1) // Ordeno por hora de comienzo de mayor a menor
+
+    const cronograma = []
+
+    if(acts.length > 0) {
+        cronograma.append(acts[0])
+
+        for(i = 1; i < acts.length; i++) {
+            const item = acts[i]
+            if(item.second() <= cronograma[i - 1].second()) { // Si termina antes de que el otro empiece
+                cronograma.pushStart(item)
+            }
+        }
+    }
+
+    return cronograma
+}
+
+// Es greedy ya que busca una solución parcialmente óptima en cada paso, sin explorar las combinaciones.
+// Funciona ya que al agarrar la tarea <n> que comience mas tarde, sé que es compatible con todas las tareas anteriores.
+// En caso de haber sido una tarea larga, es equivalente a una tarea de menor duración ya que se toman la misma cantidad de tareas.
+// Como el algoritmo no aprovecha el uso del horario total, entonces es lo mismo una tarea que ocupe todo el cronograma y una que ocupe solo una hora.
+// En caso de hacerse un "efecto convoy" donde una tarea larga ocupa varias potenciales cortas, esta no se hubiera agregado
+// en primer lugar ya que habría otra tarea que comienza después, que le hubiera ganado en prioridad.
+
+// B
+
+- Si tomo la de menor duración, puede que esta me saque potenciales eventos. Ejemplo:
+
+---------------
+            --------
+               -------------------
+
+Si tomaba la de menor duración, solamente tomaba una tarea. cuando podría haber tomado dos.
+
+- Si tomo la que comienza primero, sin importar su longitud, ocasiona un efecto convoy y ocupa
+todas las otras potenciales tareas.
+
+-------------------
+   ---
+       ---
+           -----
+                 -----
+
+El algoritmo funciona cuando usás como métrica la que finalice antes o la que empiece mas tarde.
+Esto es debido a que evita que se solapen horarios y tiene alguna métrica para maximizarlos.
+Elegirlos por horario de comienzo o duración, no lo asegura.
+
+// Ejercicio 2
+
+// Puedo asignarle los turnos a cada aula, como un foreach del punto anterior.
+// Así me aseguro de que entren la mayor parte por aula.
+
+// Agarra el que empieza ultimo
+// Si ordeno, es n log n. Por ende debería de ser más óptima la asignación, que n log n.
+fun cronogramarAulas(actividades: List<Pair<int, int>, n) {
+    if(n == 0) return []
+    const aulas = heap<Pair<int, Pair<int, int>>(key = element::first)
+    aulas.add(0, [0, 0])
+    const acts = actividades.sort(act => act.second(), 1) // Ordeno por hora de finalización más temprana. O(n log n)
+
+    for(act in acts) { // O(n)
+        const min = heap.pop() O(log n)
+        if(act.first() >= min.second()) { // Puedo asignarle aula
+            min.second = min.second() + act
+            min.first = act.second() // le asigno el horario de cierre como clave de ordenamiento
+            heap.push(min) O(log n)
+        } else if(heap.length < n) { // Puedo crear un aula para asignarla
+            heap.push([act.second(), [act]]) // O(log n)
+        } // En otro caso se pierde la actividad ya que ningún aula puede darla, si no puede la minima.
+    }
+
+    return heap.toList() // O(n)
+}
+
+// Costo = O(n log n + n * 2 * log n) = O(n log n + n log n) = O(2 n log n) = O(n log n)
+
+// Ejercicio 3
+
+fun vuelto(vuelto: int, monedas: List<int>): int {
+    var usadas = 0
+    var faltante = vuelto
+
+    for(moneda in monedas) {
+        while(faltante - moneda > 0) {
+            usadas++
+            faltante -= moneda
+        }
+    }
+
+    return usadas
+}
+
+// a 
+// Si hay un valor x, y tengo n monedas, al agarrar de mayor a menor sin sobrepasarme, me aseguro que no hay ninguna combinación de monedas de menor denominación que me de esa combinación,
+// debido a que necesitaría al menos 2 monedas para alcanzar ese valor. Al tener monedas de valor 1, me aseguro de poder encontrar todas las soluciones, debido a que para alcanzar el valor x,
+// necesito al menos x monedas de 1.
+// Ejemplo: sean j, k, l monedas tal que: j > k > l
+// Suponiendo que l es de valor 1 al ser necesaria para alcanzar todos los valores:
+// k es al menos j - l. Por ende, para alcanzar ese valor se necesitarían minimo dos monedas.
+
+// B
+// En programación dinámica, el costo es O(n * m) siendo n el numero a dar de vuelto y m la cantidad de monedas.
+// En este ejercicio es O(n) ya que por cada iteración voy restandole un valor fijo. En el peor caso se repiten "n / o" veces siendo o la de mayor valor, mas 6, que equivale a 
+// 10 + 5 + 1 + 1 + 1 + 1, que es la combinación menor a 25 que mas monedas usa.
+
+// Con una moneda de 12 centavos, puede dar un valor incorrecto:
+// Ejemplo, al obtener el vuelto de 16, sería:
+// 12 + 1 + 1 + 1 + 1 cuando debería de ser 10 + 5 + 1
+
+// Si no hay una moneda de cada tipo, por ejemplo, teniendo solo las monedas: [25, 10]
+// en caso de querer obtener el valor 30, empezaría con el 25. Esto nos dejaría un vuelto de 5. No hay moneda de 5 así que no lo puede hacer.
+// Si hubiera elegido tres monedas de 10, hubiera alcanzado ese valor.
+// Esto ocurre debido a que necesito poder generar todos los valores entre [0 .. o - 1], siendo o la moneda de mayor valor, para poder satisfacer cualquier vuelto que me pidan.  
+
+
+// Ejercicio 4
+
+/*
+    Sean D1, D2, . . . , Dn conjuntos de datos que se quieren almacenar en una cinta. El conjunto Di requiere mi Gb de memoria. La
+    cinta tiene capacidad para almacenar todos los datos. Se conoce la frecuencia πi con que se usa el conjunto Di. La densidad de
+    la cinta y la velocidad del lector son constantes. Después de que un conjunto se carga en memoria desde la cinta, la misma se
+    rebobina hasta el principio.
+*/
+
+/*
+    - const conjuntos = [...] 0 a n
+    - const pesos = [...] 0 a n
+    - const frecuencias = [...] 0 a n
+    - tengo la capacidad de almacenar todos los datos
+    - tardo lo mismo en mover cualquier tipo de dato
+*/
+
+fun ordenOptimoDatos(datos, pesos, frecuencias) {
+    return datos.map(dato, index => [frecuencias[index] / pesos[index], dato]).sort(d::first)
+}
+
+/*
+    a -> Si un dato con mucha frecuencia es el mas pesado, va a atrasarse con su lectura
+    b -> Si el dato mas accedido es el mas pesado, atrasa a todos los demás
+    c -> Sería el correcto ya que la prioridad se da por frecuencia en relación al peso. Por ende, los mas cercanos son mas pesados pero se acceden lo suficiente
+    como para que no sea costoso en el caso promedio. 
+*/

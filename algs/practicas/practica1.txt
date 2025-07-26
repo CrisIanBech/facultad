@@ -1,0 +1,182 @@
+// 1
+// • La suma de los elementos de la mitad izquierda supera a la suma de los de la mitad derecha.
+// • Cada una de las mitades es a su vez “más a la izquierda”
+// PREC: n % 2 == 0
+
+fun esMasALaIzquierda(n: Array<Int>) {
+    if(n.length == 1) return true;
+    val mitad = (n.length / 2).ceil()
+    val izquierda = n.subarray(0, mitad)
+    val derecha = n.subarray(mitad, n.length)
+    val izquierdaSumatoria = sumatoria(izquierda)
+    val derechaSumatoria = sumatoria(derecha)
+    return esMasALaIzquierda(izquierda) && izquierda > derecha
+}
+
+fun sumatoria(n: Array<Int>) {
+    var suma = 0
+    for(number in n) {
+        suma += number
+    }
+    return suma
+}
+
+// 2
+// Tenemos un arreglo a = [a1, a2, ..., an] de n enteros distintos (positivos y negativos) en orden estrictamente creciente. Queremos
+// determinar si existe una posición i tal que ai = i. Por ejemplo, dado el arreglo a = [−4, −1, 2, 4, 7], i = 4 es esa posición.
+// Diseñar un algoritmo de Divide & Conquer eficiente (de complejidad de orden estrictamente menor que lineal en n) que resuelva
+// el problema.
+
+fun existeIndexMismoValor(n: Array<Int>, int: desplazamiento) {
+    var indexMedio = ceil(n.length / 2)
+    val medio = n[indexMedio]
+    val indexMedioDesplazado = indexMedio + 1 + desplazamiento
+
+    if(indexMedioDesplazado == medio) {
+        return true
+    } else if(indexMedioDesplazado < medio) { // Nunca van a coincidir a la derecha por ser una secuencia ambos
+        return existeIndexMismoValor(n.subarray(0, medio), 0)
+    } else { // Puede estar a la derecha
+        indexMedio = medio + 1
+        return existeIndexMismoValor(n.subarray(indexMedio, n.length), indexMedio)
+    }
+}
+
+// versión doble puntero
+fun existeIndexMismoValor(n: Array<Int>, inicio: int, fin: int) {
+    
+
+    while(inicio < fin) {
+        var medio = ceil((inicio + fin) / 2)
+        val actual = n[medio]
+        if(medio + 1 == actual) {
+            return true
+        } else if(medio < actual) { // lado izquierdo
+            fin = medio - 1
+        } else { // lado derecho
+            inicio = medio + 1
+        }
+    }
+
+    var medio = ceil((inicio + fin) / 2)
+    return n[medio] == (medio + 1)
+} 
+
+
+// 3
+
+fun exponenteEficiente(a: Int, b: Int) {
+    if(b == 0) return 1;
+    var medio = ceil(b / 2)
+    val esPar = b % 2 == 0
+    val factorMedio = if(esPar) 1 else a
+    val mitadResultado = exponenteEficiente(a, medio)
+    return mitadResultado * factorMedio * mitadResultado
+}
+
+// 4
+
+fun matrizCuadradaExponente(matriz: Array<Array<Int>>, n: Int) {
+    if(n == 0) {
+        return matriz
+    }
+    
+    val exponenteProximo = ceil(n / 2);
+    val factorMedio: matriz: Array<Array<Int>>
+    val matrizIzquierda = matrizCuadradaExponente(matriz, exponenteProximo)
+    if(n % 2 == 0) {
+        factorMedio = matriz
+    } else {
+        factorMedio = matrizIdentidadDe(matriz)
+    }
+    return multiplicarMatriz(matrizCuadradaExponente, multiplicarMatriz(matrizCuadradaExponente, factorMedio))
+}
+
+// [[ 1 1 1 ]
+//  [ 1 1 1 ]
+//  [ 1 1 1 ]]
+fun multiplicarMatriz(uno: Array<Array<Int>>, dos: Array<Array<Int>>) {
+    val nuevaMatriz = Array<Int>.ofLength(uno.length)
+    for(int i in range (0 .. uno.length)) {
+        nuevaMatriz[i] = Array<Int>.ofLength(uno.length, 0)
+    }
+    for(int fila in range (0 .. uno.length)) { // Por cada fila
+        for(int columna in range (0 .. uno.length)) { // Por cada columna
+            for(int elemento in range (0 .. uno.length)) // Por cada elemento de la columna {
+                nuevaMatriz[fila][columna] += uno[elemento] + dos[elemento]
+            }
+        }
+    }
+    return nuevaMatriz
+}
+
+fun matrizIdentidadDe(matriz: Array<Array<Int>>) {
+    val nuevaMatriz = Array<Int>.ofLength(uno.length)
+    for(int i in range (0 .. uno.length)) {
+        nuevaMatriz[i] = Array<Int>.ofLength(uno.length, 0)
+    }
+    for(int i in range 0 .. uno.length) {
+        nuevaMatriz[i][i] = 1
+    }
+}
+
+// 5
+
+fun sucesionPotencia(matriz: Array<Array<Int>>, n: Int) { 
+    if(n == 1) {
+        return matriz
+    }
+
+    val mitadPotencia = n / 2
+    val matrizIzquierdaPotencia = sucesionPotencia(matriz, mitadPotencia)
+    val matrizDerechaPotencia = potencia(matriz, mitadPotencia)
+    return matrizIzquierdaPotencia + multiplicarMatriz(matrizDerechaPotencia, matrizIzquierdaPotencia)
+}
+
+// 5
+fun exponenteEficiente(a: Int, b: Int) {
+  if(b == 0) return 1
+  var medio = ceil(b / 2)
+  val esPar = b % 2 == 0
+  val factorMedio = if(esPar) 1 else a
+  val mitadResultado = exponenteEficiente(a, medio)
+  return mitadResultado * factorMedio *  mitadResultado
+}
+
+// 6
+
+fun distanciaNodos(nodo: Nodo<Int>, n1: Int, n2: Int) {
+    return distanciaNodo(nodo, n1) + distanciaNodo(nodo, n2)
+}
+
+fun distanciaNodo(nodo: Nodo<Int>, n: Int) {
+    if(nodo.value == n) {
+        return 0
+    } else if(nodo.value < n) {
+        return distanciaNodo(nodo.right, n) + 1
+    } else {
+        return distanciaNodo(nodo.left, n) + 1
+    }
+}
+
+// 7
+
+fun esRedBlackTree(RBT<T> rbt): Boolean {
+   if(rbt.value === null && rbt.color === BLACK) retun true;
+   val blackChildren, isRBT = esRedBlackTreCompl(rbt.root)
+   return isRBT
+}
+ fun esRedBlackTreeCompl(RBT<T> rbt): <Int, Boolean> {
+   if(rbt.value == null && rbt.color == BLACK) return [1, true];
+   if(rbt.color == RED);{
+        val leftBlackChildren, isRBTLeft = esRedBlackTreCompl(rbt.left)
+        val rightBlackChildren, isRBTRight = esRedBlackTreCompl(rbt.right)
+        return leftBlackChildren + rightBlackChildren, (leftBlackChildren === rightBlackChildren && isRBTLeft && isRBTRight)
+   }
+    if(rbt.color == BLACK) {
+        val leftBlackChildren, isRBTLeft = esRedBlackTreCompl(rbt.left)
+        val rightBlackChildren, isRBTRight = esRedBlackTreCompl(rbt.right)
+        val bothBlackChildren = rbt.left.color == BLACK && rbt.right.color == BLACK
+        return leftBlackChildren + rightBlackChildren + 1, (bothBlackChildren && leftBlackChildren === rightBlackChildren && isRBTLeft && isRBTRight)
+    }
+}

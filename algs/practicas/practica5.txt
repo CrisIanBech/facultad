@@ -1,0 +1,640 @@
+// Ejercicio 1
+
+// Calcular el costo de saida de un vértice es O(1) pero si es de todos los vértices, O(n).
+// Calcular el costo de entrada es O(n^2) ya que por cada vértice tengo que recorrer la lista para ver si apunta a él.
+
+// Ejercicio 2
+
+// Lista de adyacencias
+
+// Un BST es un grafo aciclico, dirigido y conexo asi que no voy a tener ciclos y seteo la relación solo en el nodo en el que estoy parado
+// Asumo que cada nodo está numerado del 0 a bst.length - 1
+
+struct Nodo {
+    value: int
+    ady: List<Nodo>
+}
+
+fun bstToGraphAdy(bst: BST): List<Pair<Int, List<Int>> {
+    val graph = List<Pair<Int, List<Int>>()
+    val nodes = Queue()
+    nodes.push(bst.root)
+    var node = nodes.dequeue()
+    while(node != null) {
+        graph.add(node.id, listOfChildNodes(node))
+        if(node.left != null) nodes.enqueue(node.left)
+        if(node.right != null) nodes.enqueue(node.right)
+        node = nodes.deque()
+    }
+    return graph
+}
+
+fun listOfChildNodes(node): List<Int>() {
+    val list = List()
+    if(node.left != null) list.push(left.id)
+    if(node.right != null) list.push(right.id)
+    return list
+}
+
+// Matriz de adyacencias
+
+fun bstToGraphMatrix(bst: BST): Array<Array<Int>> {
+    val length = bst.length
+    val graph: Array<Array<Int>> = arrayOfLength(length)
+    for(int i = 0; i < length; i++) {
+        matrix.push(arrayOfLength(length, defaultValue = 0))
+    }
+    val nodes = Queue()
+    nodes.push(bst.root)
+    var node = nodes.dequeue()
+    while(node != null) {
+        if(node.left != null) {
+            matrix[node.id][node.left.id] = 1
+            nodes.push(node.left)
+        }
+        if(node.right != null) {
+            matriz[node.id][node.right.id] = 1
+            nodes.push(node.right)
+        }
+        node = nodes.dequeue()
+    }
+    return graph
+}
+
+// Ejercicio 3
+
+// Matriz
+fun gAlCuadrado(graph: Array<Array<Int>>) {
+    val squareGraph = arrayOfLength(graph.length)
+    for(int i = 0; i < graph.length; i ++) {
+        squareGraph[i] = arrayOfLength(graph.length)
+    }
+
+    // copio valores
+    for(int i = 0; i < graph.length; i++) {
+        for(int j = 0; i < graph.length; i++) {
+            squareGraph[i][j] = graph[i][j]
+        }
+    }
+
+    // Por cada par de elementos, los uno si ya existe alguna conexion en la anterior matriz
+    for(int i = 0; i < graph.length; i++) {
+        for(int j = 0; j < graph.length; j++) {
+            for(int k = 0; k < graph.length; k++) {
+                if(graph[i][k] == 1 && graph[k][j]) {
+                    squareGraph[i][j] = 1
+                }
+            }
+        }
+    }
+    
+    return squareGraph
+}
+
+// Lista de adyacencias
+
+// Lista
+fun gAlCuadrado(graph: List<List<Int>>) {
+    // Copio el grafo anterior
+    val squareGraph = listOfSize(squareGraph.length)
+    for(int i = 0; i < squareGraph.length; i++) {
+        val nodo = squareGraph.get(i)
+        for(int j = 0; j < nodo.ady.length; j++) {
+            squareGraph.add(nodo.ady.get(j))
+        }
+    }
+
+    // Por cada nodo
+    for(int i = 0; i < graph.length; i++) {
+        // Por cada vecido del nodo
+        val nodo = squareGraph.get(i)
+        for(int j = 0; j < nodo.ady.length; j++) {
+            // Por cada vecino del vecino del nodo
+            val vecino = nodo.ady.get(j)
+            for(int k = 0; k < vecino.ady.length; k++) {
+                // Agrego este como vecino de ese
+                val vecinoDelVecino = vecino.ady.get(k)
+                // Al ser un grafo no dirigido, puedo llegar desde ese vecino a este, como de este a ese
+                // Por ende se va a realizar la misma operacióne eventualmente y no preciso conectar ambos en esta iteración
+                nodo.ady.add(vecinoDelVecino)
+                // No estoy evitando duplicaciones
+                // Podría transformar la lista de adyacentes a un set, y después volver a convertirla en lista y asignarla nuevamente.
+            }
+        }
+    }
+
+    return squareGraph
+}
+
+
+// Ejercicio 4
+
+fun fuenteUniversal(grafo: Array<Array<Int>>) {
+    var candidato = 0
+    for(int i = 0; i < grafo.length; i++) {
+        if(grafo[candidato][i] === 0) {
+            candidato = i
+        }
+    }
+
+    for(int i = 0; i < grafo.length; i++) {
+        if(i != candidato && grafo[candidato][i] === 0) {
+            return false
+        }
+    }
+
+    for(int i = 0; i < grafo.length; i++) {
+        if(i != candidato && grafo[i][candidato] === 1) {
+            return false
+        }
+    }
+
+    return true
+}
+
+// Ejercicio 5
+
+/*
+    Tiene problemas con grafos ponderados ya que no podés guardar el peso de las aristas. Para solucionarlo, el hash deberia de tener un par que contenga el nodo y 
+    el peso. También tiene problemas para grafos no dirigidos por la duplicidad de las relaciones.
+*/
+
+// Ejercicio 6
+
+/*
+    a.
+    Sigue siendo O(V + E) en el peor caso ya que se evitan los ciclos en BFS y DFS mediante estructuras auxiliares que no iteren si ya se visitaron dichos nodos.
+*/
+/*
+    b.
+    El algoritmo representa tanto los recursos como procesos como vértices, y las dependencias como aristas. El grafo tiene las propiedades de ser
+    dirigido y no ponderado.
+    Su objetivo es encontrar un recorrido ciclico, ya que implica que un proceso está a la espera de un recurso, que a la vez está asignado a otro proceso, que está
+    esperando a un recurso que está asignado al primer proceso, como minimo.
+*/
+
+// Ejercicio 7
+
+// a.
+
+// Si saco una arista y puedo conectarlas, significa que agregandola podria ser un camino simple
+fun verificarCircuitoSimple(grafo: List<List<Int>>) {
+    for(int i = 0; i < grafo.length; i++) {
+        val nodo = grafo.get(i)
+        for(int j = 0; i < nodo.ady.length; i++) {
+            if(!esCircuitoSimple(nodo, nodo.ady(j), grafo)) {
+                return false
+            }
+        }
+    }
+    return true
+}
+
+fun esCircuitoSimple(comienzo, fin, grafo) {
+    comienzo.ady.remove(fin)
+    fin.ady.remove(comienzo)
+
+    // aplico BFS
+    val nodos = Queue()
+    val visitados = Set()
+    var nodo = comienzo
+    var encontrado = false
+    while(nodo != null) {
+        if(nodo == fin) { encontrado = true }
+        for(vecino in nodo.ady) {
+            if(visitados[vecino] == null) {
+                visitados.add(vecino)
+                queue.add(vecino)
+            }
+        }
+        nodo = nodos.dequeue()
+    }
+
+    comienzo.ady.add(fin)
+    fin.ady.add(comienzo)
+
+    return encontrado
+}
+
+fun esConexo(grafo: List<List<Int>>) {
+    val cantNodos = grafo.length
+    var nodosContados = 0
+    val queue = Queue()
+    val visitados = Set()
+    if(cantNodos != 0) queue.enqueue(grafo.first())
+    var nodo = queue.dequeue()
+    while(nodo != null) {
+        nodosContados++
+        visitados.add(nodo)
+        for(vecino in nodo.ady) {
+            if(vecino not in visitados) {
+                queue.enqueue(vecino)
+            }
+        }
+        nodo = queue.dequeue()
+    }
+    return nodosContados == cantNodos
+}
+
+// b.
+
+// Orientar = Digrafo que no repite aristas (x, y) (y, x)
+fun digrafoFuertementeConexo(grafo: List<List<Int>) {
+    if(!esConexo(grafo)) throw Exception() // Si no es conexo no puedo hacerlo fuertemente conexo
+    if(!verificarCircuitoSimple) throw Exception() // Si tiene conexiones unilaterales a un subgrafo ciclico, significa que no puedo conectarlo todo completamente
+
+    val vistos = hashMap<Boolean>()
+    val aristasVistas = hashSet<Pair<Int, Int>>()
+    val nodos = Stack()
+    nodos.push(grafo[0])
+    var nodo = nodos.pop()
+    
+    while(nodo != null) {
+        visto[nodo] = true
+        for(vecino in nodo.ady) {
+            val arista = Pair(nodo, vecino)
+            val arista' = Pair(nodo, vecino)
+            if(arista in aristasVistas or arista' in aristasVistas) {
+                nodo.remove(vecino) // Ya linkeé estos nodos, por lo que lo remuevo
+                continue;
+            }
+
+            aristasVistas.put(arista)
+
+            if(!vistos[vecino]) {
+                nodos.push(vecino)
+            }
+        }
+    }
+}
+
+// Ejercicio 8
+
+fun subgrafos(grafo: List<Pair<int, List<int>>>>, opciones: List<Pair<int, List<int>>>, i: int): List<List<Pair<int<List<int>>>> {
+    if(grafo.length == i) return [opciones]
+
+    elemento = grafo[i]
+    agregando = subgrafos(grafo, [...opciones, elemento], i + 1)
+    sin_agregar = subgrafos(grafo, opciones, i + 1)
+    return agregando + sin_agregar
+}
+
+fun subgrafoCompletoMaximal(grafo: List<Pair<int, List<int>>>>, opciones: List<Pair<int, List<int>>>, i: int): List<Pair<int, List<int>>> {
+    if(grafo.length == i) return opciones
+
+    elemento = grafo[i]
+    agregando = if(esCompleto([...opciones, elemento])) subgrafos(grafo, [...opciones, elemento], i + 1) else []
+    sin_agregar = subgrafos(grafo, opciones, i + 1)
+    return max(agregando, sin_agregar, subgrafo => subgrafo.length)
+}
+
+fun subgrafosCompletosMaximales(grafo: List<List<int>>>): List<List<Pair<int, List<int>>>>> {
+    if(grafo.length == i) return [opciones]
+
+    elemento = grafo[i]
+    agregando = if(esCompleto([...opciones, elemento])) subgrafos(grafo, [...opciones, elemento], i + 1) else []
+    sin_agregar = subgrafos(grafo, opciones, i + 1)
+    return agregando + sin_agregar
+}
+
+fun esCompleto(grafo: List<Pair<int, List<int>>>) {
+    for(nodo in grafo) {
+        for(otroNodo in grafo) {
+            if(nodo != otroNodo && nodo not in otroNodo.ady) return false    
+        }
+    }
+    return true
+}
+
+// Ejercicio 9
+
+fun numerarGrafoBFS(grafo: List<Pair<int, List<int>>>) {
+    int numero = 0
+    porRecorrer = Queue()
+    visitados = Set()
+    if(grafo.length != 0) porRecorrer.enqueue(grafo[0])
+    nodo = porRecorrer.dequeue()
+    while(nodo != null) {
+        visitados.add(nodo)
+        nodo.value = numero++
+        for(vecino in nodo.ady) {
+            if(vecino not in visitados) {
+                porRecorrer.enqueue(vecino)
+            }
+        }
+        nodo = porRecorrer.dequeue()
+    } 
+    return grafo
+}
+
+fun numerarGrafoDFS(grafo: List<Nodo>) {
+    int numero = 0
+    porRecorrer = Stack()
+    visitados = Set()
+    if(grafo.length != 0) porRecorrer.push(grafo[0])
+    nodo = porRecorrer.pop()
+    while(nodo != null) {
+        nodo.value = numero++
+        for(vecino in nodos.ady) {
+            if(vecino not in visitados) {
+                porRecorrer.push(vecino)
+            }
+        }
+        nodo = porRecorrer.pop()
+    }
+    return grafo
+}
+
+// Ejercicio 10
+
+fun bFSRecursivo(grafo: List<Nodo>) {
+    recorridos = Set()
+    bFSRecursivoAuxiliar(grafo, grafo[0], recorridos)
+}
+
+fun bFSRecursivoAuxiliar(grafo: List<Nodo>, nodo, recorridos: Set) {
+    recorridos.add(nodo)
+    for(vecino in nodo) {
+        if(vecino not in recorridos) {
+            bFSRecursivoAuxiliar(grafo, vecino, recorridos)
+        }
+    }
+}
+
+fun bfsIterativo(grafo: List<Pair<int, List<int>>>) {
+    porRecorrer = Queue()
+    visitados = Set()
+    if(grafo.length != 0) porRecorrer.enqueue(grafo[0])
+    nodo = porRecorrer.dequeue()
+    while(nodo != null) {
+        visitados.add(nodo)
+        nodo.value = numero++
+        for(vecino in nodo.ady) {
+            if(vecino not in visitados) {
+                porRecorrer.enqueue(vecino)
+            }
+        }
+        nodo = porRecorrer.dequeue()
+    } 
+    return grafo
+}
+
+// Ejercicio 11
+
+/*
+    b.
+    Hipótesis
+        - G(V, E) es conexo
+        - Por ende, para todo par (x, y) e V, hay al menos un camino
+        (x, e2), (e2, e3) ... (e4, y) subconjunto de E
+        - BFS explora todos los nodos de V en orden de distancia al nodo inicial.
+        
+    Supongamos que existe elemento v' que BFS no visita.
+    
+    Al ser conexo, (x, v') es elemento de E y v' es elemento de V
+
+    Como BFS explora todos los nodos, eventualmente visita al nodo x al ser un grafo conexo.
+    
+    Esto implica que va a visitar al vértice v' también.
+
+    Contradicción: v' no fue visitado en BFS.
+
+    Conclusión: BFS alcanza todos los vértices de G
+*/
+
+// Es exactamente el mismo razonamiento para DFS
+
+// Ejercicio 12
+
+// a.
+
+fun arbolGeneradorDFS(grafo: Array<Array<int>>) {
+    int n = grafo.length
+    Array<boolean> visitados = arrayOfLength(n, default: false)
+    Array<int> padres = arrayOfLength(n, default: -1)
+    Stack porVisitar = Stack()
+    if (n > 0) { porVisitar.push(0); visitados[0] = true }
+    while(porVisitar.hasElements()) {
+        int nodo = porVisitar.pop()
+        for(i in range n - 1 until 0) {
+            if(grafo[nodo][i] == 1 && !visitados[i]) {
+                visitados[i] = true
+                padres[i] = nodo // Seteo al padre como el nodo actual para después remover aristas ciclicas
+                porVisitar.push(i)
+            } else if(padres[i] != nodo) {
+                grafo[nodo][i] = 0 // Remuevo la conexión ya que no puedo tener ciclos
+            }
+        }
+    }
+
+    // Debería de remover las filas y columnas correspondientes a los nodos que no tienen padre para evitar un grafo
+    inconexo
+
+    return grafo
+}
+
+fun arbolGeneradorBFS(grafo: Array<Array<int>>) {
+    int n = grafo.length
+    Array<boolean> visitados = arrayOfLength(n, default: false)
+    Array<int> padres = arrayOfLength(n, default: -1)
+    Queue porVisitar = Queue()
+    if (n > 0) { porVisitar.enqueue(0); visitados[0] = true}
+    while(porVisitar.hasElements()) {
+        int nodo = porVisitar.dequeue()
+        for(i in range n - 1 until 0) {
+            if(grafo[nodo][i] == 1 && !visitados[i]) {
+                visitados[i] = true
+                padres[i] = nodo // Seteo al padre como el nodo actual para después remover aristas ciclicas
+                porVisitar.enqueue(i)
+            } else if(padres[i] != nodo) {
+                grafo[nodo][i] = 0 // Remuevo la conexión ya que no puedo tener ciclos
+            }
+        }
+    }
+
+    // Debería de remover las filas y columnas correspondientes a los nodos que no tienen padre para evitar un grafo
+    inconexo
+
+    return grafo
+}
+
+/*
+    Ejercicio 13:
+    BFS: Explora nodos por orden en base a los niveles de cercania con la raíz r
+    DFS: Explora nodos por orden en base a la mayor profundidad posible a partir de la raiz r
+
+    Al hacer un arbol generador por BFS, y explorarlos por orden de cercania a la raíz r, la máxima altura alcanzable
+    es igual al nivel de cercanía más grande a la raíz r.
+    Al hacer un arbol generador por DFS, y explorarlos por orden en profundidad a la raíz r, la máxima altura alcanzable es
+    igual al nivel de profundidad, en caso de que sea acíclico. Por ende, en este caso la altura va a ser igual aplicando
+    BFS y DFS.
+    En caso de que sea cíclico, y DFS generar por profundidad, puede que visite antes los nodos adyacentes a la raíz r buscando
+    por profundidad, a partir de una de las ramas, que en base al orden de cercania de la raíz r.
+    Por ende la altura es como minimo el orden de cercanía, y como máximo la cantidad de aristas que hay.
+*/
+
+// Ejercicio 14
+
+// a.
+
+fun esConexo(grafo: Array<Pair<int, List<int>>) {
+    int elementos = grafo.length
+    Queue porVisitar = Queue()
+    Array<Boolean> visitados = arrayOfLength(grafo.length, default: false)
+    int visitados = 0
+    if(grafo.length > 0) porVisitar.enqueue(grafo[0])
+    while(porVisitar.hasElements()) {
+        visitados++
+        Pair<int, List<int>> nodo = porVisitar.dequeue()
+        for(vecino in nodo.ady) {
+            if(!visitados[vecino]) {
+                porVisitar.enqueue(grafo[vecino])
+            }
+        }
+    }
+    return elementos == visitados
+}
+
+// b.
+
+fun cantidadComponentes(grafo: Array<Pair<int, List<int>>) {
+    int elementos = grafo.length
+    Queue porVisitar = Queue()
+    int cantidadComponentes = 0
+    Array<Boolean> visitados = arrayOfLength(grafo.length, default: false)
+    for(int i = 0; i < grafo.length; i++) {
+        if(visitados[i]) continue;
+        cantidadComponentes++
+        porVisitar.enqueue(i)
+        while(porVisitar.hasElements()) {
+            Pair<int, List<int>> nodo = porVisitar.dequeue()
+            for(vecino in nodo.ady) {
+                if(!visitados[vecino]) {
+                    porVisitar.enqueue(grafo[vecino])
+                }
+            }
+        }
+    }
+    return elementos == visitados
+}
+
+// Ejercicio 15
+a. Es O(E log E + E)
+b. Utiliza una técnica Greedy
+
+function prim(Array<Pair<int, List<Pair<int, int>>>> grafo) {
+    Heap<Triplet> aristasPorVer = new Heap()
+    Array<Boolean> visitados = arrayOfLength(grafo.length, default: false)
+    Array<Pair<int, List<Pair<int, int>>>> mst = arrayOfLength(grafo.length)
+    int aristasDeArbol = grafo.length - 1
+    int aristas = 0
+    int costo = 0
+    agregarAristas(aristasPorVer, 0, grafo, visitados)
+    while(heap.hasElements() && aristas < aristasDeArbol) {
+        Triplet<int, int, int> arista = heap.extract() // (nodoOrigen, nodoDestino, peso)
+        int origen = arista.first()
+        int destino = arista.second()
+        int peso = arista.third()
+        if(!visitados[destino]) {
+            aristas++
+            costo += peso
+            agregarAristas(heap, destino, grafo, visitados)
+        } 
+    }
+}
+
+function agregarAristas(Heap<Triplet<int, int, int>> heap, int i, Array<Pair<int, List<Pair<int, int>>>> grafo, Array<int> visitados) {
+    visitados[i] = true
+    
+    Pair<int, List<Pair<int, int>>> nodo = grafo[i]
+    for(Pair<int, int> arista in nodo.second()) {
+        if(!visitados[arista.first()]) {
+            heap.add(Triplet(i, arista.first(), arista.second())) // (nodoOrigen, nodoDestino, peso)
+        }
+    }
+}
+
+// Ejercicio 16
+
+/* 
+    Es O(V * V) ya que se necesitan ver todos los elementos de la matriz, aunque algunos sean aristas que no los conecten.
+    El tiempo de ejecución de la lista de adyacencias es O(V + E)
+    Siempre va a ser mas eficiente BFS con una lista de adyacencias, a menos que sea un grafo completo con bucles
+    El costo para pasarlo a la otra estructura es de O(V * V) por lo que no vale la pena, ya que con ese costo se resuelve.
+    
+/*
+
+// Ejercicio 17
+
+fun circuitoEuleriano(ArrayList<Pair<int, List<int>>> grafo) {
+    List<int> circuito = []
+    Stack caminoActual = Stack()
+
+    int start = 0
+    int impares = 0
+
+    for(nodo in grafo) {
+        if(nodo.ady.length % 2 == 1) {
+            start = nodo.first() // seteo el id
+            impares++
+        }
+    }
+
+    if(impares != 0 && impares != 2) { return [] }
+
+    if(grafo.length > 0) caminoActual.push(grafo[start])
+
+    while(caminoActual.hasElements()) {
+        Pair<int, List<int>> nodoActual = caminoActual.pop()
+
+        if(!nodoActual.second().isEmpty()) {
+            Pair<int, List<int>> proximo = nodoActual.second().removeLast()
+            caminoActual.push(proximo)
+        } else {
+            circuito.prepend(nodoActual.first())
+            caminoActual.pop()
+        }
+
+    }
+
+    return circuito
+}
+
+// Ejercicio 18
+
+fun contarCaminos(ArrayList<Pair<int, List<int>> grafo, partido: int, destino: int) {
+    Array<int> entradas = arrayOfLength(grafo.length, 0)
+    Array<Pair<int, List<int>> ordenTopologico = arrayOfLength(grafo.length, 0)
+
+    for(nodo in grafo) {
+        for(vecino in nodo.ady) {
+            entradas[vecino.first()]++
+        }
+    }
+
+    Queue<Pair<int, List<int>>> base = Queue()
+    for(nodo in nodos) {
+        if(entradas[nodo.first] == 0) base.enqueue(nodo)
+    }
+
+    while(base.hasElements()) {
+        Pair<int, List<int>> nodo = base.dequeue()
+        orden.append(nodo)
+        for(vecino in nodo.ady) {
+            entradas[vecino]--
+            if(entradas[vecino] == 0) {
+                base.enqueue(vecino)
+            }
+        }
+    }
+
+    Array<int> combinaciones = arrayOfLength(grafo.length, 0)
+    combinaciones[partido] = 1 // Reseteo ya parto de acá
+    for(nodo in ordenTopologico) {
+        for(vecino in nodo.ady) {
+            combinaciones[vecino.first()] += combinaciones[nodo.first()]
+        }
+    }
+
+    return combinaciones[destino]
+}

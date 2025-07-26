@@ -1,0 +1,353 @@
+// 1
+
+# Se podría mejorar si se usan 3 variables en un array hasta llegar a la iteración deseada, debido a que solo precisás los últimos
+dos valores:
+
+# Esquema de llenado de memoria:
+# [n - 1, n - 2, n]
+# uso módulo para crear un ciclo
+# [n - 1, n - 2, n] => [n, n - 2, n - 1] => [n - 1, n, n - 2] => ...
+
+fun fibonacciEficiente(n) {
+    const values = [0, 1, 1] // Costo de memoria O(1)
+    if(n < 2) return values[n]
+    for(int i = 3 .. n) {
+        anteUltimo = values[(i - 2) % 3]
+        anterior = values[(i - 1) % 3]
+        actual = anteUltimo + anterior
+        values[i] = actual 
+    }
+    return values[n % 3]
+}
+
+// 2
+coeficienteBinomial(n, m)
+0 si m > n
+n si m == 1
+coeficienteBinomial(n - 1, m - 1) + coeficienteBinomial(n - 1, m)
+
+# Uso técnica bottom up
+
+# Esquema de llenado de memoria:
+# Matriz. El caso matriz[i, j] aplica la fórmula recurrente como ((n - 1 /) / (m - 1)) en matriz[i - 1, j -1] 
+# ((n - 1) / m) como matriz[i - 1, j]. Empiezo del caso base y aplico recurrrencia en los valores calculados.
+
+fun coeficienteBinomial(n, m) {
+    if(m > n) return 0; // m <= n
+    if(m == 1) return n; // m > 1
+
+    const matriz = Matriz(n + 1, m + 1, 0) // n = ancho, m = alto, 0 = valor default
+
+    for(i in range((1, n]) { // i = fila
+        for(j in range ((1, m])) { // j = columna
+            matriz[i, j] = matriz[i - 1, j - 1] + matriz[i - 1, j]
+        }
+    }
+    return matriz[i, j]
+}
+
+// 3
+
+recorridoMatricialEficienteCompl(n, m, matriz)
+const actual = matriz[n - 1, m - 1] // m = alto, n = ancho
+if(n == matriz.ancho && m == matriz.alto) return matriz[n - 1, m - 1];
+if(n == matriz.ancho) return actual + recorridoMatricialEficiente(n, m + 1, matriz)
+if(n == matriz.alto) return actual + recorridoMatricialEficiente(n + 1, m, matriz)
+return actual + min(recorridoMatricialEficiente(n, m + 1, matriz), recorridoMatricialEficiente(n + 1, m, matriz))
+
+# Uso técnica bottom up
+
+# Uso una matriz copia con una columna y fila extra para los casos base. 
+# Cada par i, j contienen el costo del subcamino óptimo.
+
+fun recorridoMatricialEficienteCompl(n, m, matriz) {
+    const matrizCostos = Matriz(n + 1, m + 1, 0) // n = ancho, m = alto, 0 = valor default
+    for(i in range(1..n]) {
+        for(j in range(1..m])) {
+            let actual = matriz[i - 1, j - 1]
+            left = matrizCostos[i - 1, j]
+            right = matrizCostos[i, j + 1]
+            matrizCostos[i, j] = actual + min(left, right)
+        }
+    }
+    return matrizCostos[n, m]
+}
+
+// 4
+
+val operaciones = [+, *, ^]
+
+// doy vuelta el array para que se hagan en orden
+fun intercalar(v, w) {
+    arrayVolteado = v.reverse()
+    val ops = intercalar'(arrayVolteado, 0, w)
+    val op = ops.find(op => op.sum === w)
+    return op?.second()
+}
+
+fun intercalar'(v, vi, w) {
+    if(vi == v.length -1) return (v[vi -1], [])
+    val actual = v[vi]
+    return aplicarOp(intercalar(v, vi - 1, w), 0, actual) + 
+        aplicarOp(intercalar(v, vi - 1, w), 1, actual) + 
+        aplicarOp(intercalar(v, vi - 1, w), 2, actual)
+}
+
+fun aplicarOp(ops, i, value) {
+    return ops.map(tupla => {
+        val sum, ops' = tupla
+        val op = operaciones[i]
+        val result = op.apply(sum, value)
+        ops'.append(op)
+        return (result, ops')
+    })
+}
+
+// Algoritmo de PD
+
+// Memoizo los calculos para las operaciones (0..n). En cada capa los calculos se repiten.
+// Utilizo una estructura donde cada capa n contiene todas las operaciones (0 .. n) posibles
+// combinando las operaciones dadas.
+
+val operaciones = [+, *, ^]
+
+fun intercalar(v, w) {
+    val ops: List<Pair<int, List<op>>> = listOfSize(v)
+    ops[0].append((v[0], [])) // Relleno la primera columna con el valor base
+    for(int i = 1; i < v.length; i++) {
+        val lastOperations = ops[i - 1]
+        val currentVal = v[i]
+        ops[i].appendAll(aplicarOp(lastOperations, 0, currentVal))
+        ops[i].appendAll(aplicarOp(lastOperations, 1, currentVal))
+        ops[i].appendAll(aplicarOp(lastOperations, 2, currentVal))
+    }
+    val op = ops[v.length - 1].find(pair => pair.first() === w)
+    return op?.second()
+}
+
+fun aplicarOp(ops, i, val) {
+    return ops.map(pair => {
+        val sum, ops' = pair
+        val op = operaciones[i]
+        ops'.append(op)
+        return (op.apply(val, sum), ops') // agrego al final para respetar el orden
+    })
+}
+
+// Ej. 5
+
+fun inventario(mes, stockMinimo, stockEsperado, costos): Pair<int, <List<Pair<int, int>> { // El primer elemento es el costo total, el resto es la cantidad a producir junto al mes
+    if(mes == 0) {
+        return costoMensual(mes, stockMinimo, stockEsperado, costos) + 250
+    }
+
+    const produccionEsperada = max(stockMinimo[mes], stockEsperado)
+
+    var minimo = inventario(mes - 1, stockMinimo, stockEsperado + stockMinimo[mes], costos) // No produzco nada
+    minimo[1].append([mes, 0, mes]) // No produje nada este mes
+
+    for(i = 100; i <= produccionEsperada; i += 100) {
+        const produccionPrevia = stockEsperado - i
+        const produccionActual = i
+        
+        const accion = inventario(mes - 1, stockMinimo, produccionPrevia, costos)
+        accion[0] += costoFijo(mes, produccionActual, costos) + 250 // agrego el costo de producir este mes
+        accion[1].append([produccionActual, mes]) // agrego la producción esperada para este mes
+
+        if(accion[0] < minimo[0]) {
+            accion = minimo
+        }
+    }
+
+    return minimo
+}
+
+// función con DP
+
+fun inventarioDP(mes, stockMinimo, costos) {
+    const maximaProduccion = costos.max() * 2 // Ej, el maximo es 400. Pongo el doble por si un mes tiene minimo 400 y le piden 400
+
+    const matriz = matrizDeLargo(mes, maximaProduccion / 100)
+
+    for(i in range (0..maximaProduccion / 100)) {
+        matriz[0][i] = costoMensual(mes, stockMinimo, max(stockMinimo[mes], i * 100)) + 250 // Relleno la primera columna con los costos
+    }
+
+    for(i in range (1..mes)) {
+        for(j in range (0 until maximaProduccion)) {
+            const costoProduccion = costoMensual(i, stockMinimo, j, costos) + if(j == 0) then 0 else 250
+            matriz[i][j] = costoProduccion  
+        }
+    }
+
+    // si quisiera dar solo el costo
+    var costoMinimo = Int.infinity
+    var id = 0
+    for(i in range(0 until stockMinimo[mes] / 100)) {
+        if(costoMinimo < matriz[mes][i]) {
+            costoMinimo = matriz[mes][i]
+            id = i
+        }
+    }
+    return costoMinimo
+
+    // si quiero dar las producciones por mes
+    const opciones = []
+    var mesActual = mes
+    var esperado = id * 100
+    while(mesActual > 0) { 
+        const minProd = stockMinimo[mes]
+        opciones.addFirst(mes, esperado)
+        esperado = stockMinimo[mesActual] + abs(minProd, esperado)
+        mesActual--
+    }
+    return opciones
+}
+
+fun costoMensual(mes, stockMinimo, stockEsperado, costos) = costoFijo(mes, stockMinimo[mes], costos) + costoVariable(mes, abs(stockEsperado - stockMinimo[mes]), costos)
+
+fun costoFijo(mes, stockMinimo, costos) {
+    return stockMinimo * costos[mes]
+}
+
+fun costoVariable(mes, stockEsperado, costos) {
+    costos[mes] * stockEsperado * + stockEsperado * 1.5 
+}
+
+
+// Ej. 6
+// Dar un algoritmo de programación dinámica para el problema de dar el vuelto con el menor número de billetes posible suponiendo
+que se cuenta con billetes de 1, 2, 5, 10, 20 y 50 pesos. Decir si funciona en todos los casos o sólo en algunos casos (infinito
+número de monedas disponibles, para monedas de cualquier valor, etc.). Dar la complejidad del algoritmo
+
+// algoritmo recursivo
+fun vuelto(billetes, valor) {
+    if(valor === 0) return 0;
+    if(valor < 0) return Int.positiveInfinity;
+    val min = Int.negativeInfinity
+    for(billete in billetes) {
+        min = min(min, 1 + vuelto(billetes, valor - billete))
+    }
+    return min
+}
+
+// Uso una matriz donde x = dinero e y = monedas
+// ¿Cómo hago que no desborde el largo del array? -> Solo tengo en cuenta la moneda si da index positivo.
+// caso contrario devuelvo la mejor opción previamente calculada.
+
+fun vuelto(billetes, valor) {
+    val width = valor + 1
+    val height = billetes.length + 1
+    val matriz = Matriz(width, height)
+    for(j in range(0 until width)) {
+        matriz[0, j] = 0
+    }
+    for(i in range(0 until height)) {
+        matriz[i, 0] = 0
+    }
+    for(i in range(1 until width)) {
+        for(j in range(1 until height)) {
+            // El valor que intento conseguir es el index de la fila actual (i)
+            val billete = billetes[j - 1]
+            val resto = i - billete
+            if(resto < 0) {
+                matriz[i, j] = matriz[i, j - 1] // No tomo el billete. Consumo lo que gasté antes.
+            } else {
+                matriz[i, j] = min(matriz[i, j - 1], 1 + matriz[i - billete, j]) // Si uso el billete, sumo uno y me fijo
+                // el valor de recurrencia de haberlo usado. Sino, no lo uso y me fijo si era más óptimo no tomarlo.
+            }
+        }
+    }
+    return matriz[valor, billetes.length]
+}
+
+// Con un array
+
+fun vuelto(billetes, valor) {
+    val width = valor.length + 1 
+    val cantidades = arrayOfLength(width)
+    for(i in range(0 until cantidades)) {
+        cantidades[i] = Int.positiveInfinity
+    }
+    for(i in range(1 until cantidades)) {
+        for(billete in billetes) {
+            if(i - billete >= 0) {
+                // Veo el minimo entre no usarlo o usarlo y agregar un billete más a la cantidad total
+                cantidades[i] = min(cantidades[i], cantidades[i - billetes] + 1)
+            }
+        }
+    }
+    return cantidades[valor]
+}
+
+// Ej 7
+/*
+    Sean u y v dos string de caracteres. Queremos transformar u en v con el menor número de operaciones posibles de alguno de los
+    siguientes tipos:
+        • borrar un caracter
+        • agregar un caracter
+        • cambiar un caracter
+*/
+
+fun transformar(string1, string2, i, j) {
+    if(i < 0 || j < 0) return 0;
+    val letra1 = string1[i] 
+    val letra2 = string2[j]
+    if(letra1 == letra2) {
+        return min(
+            transformar(string1, string2, i - 1, j) + 1, // elimino izquierdo
+            transformar(string1, string2, i, j - 1) + 1, // elimino derecho
+            transformar(string1, string2, i - 1, j - 1) + 1, // modifico cualquiera de los dos
+            transformar(string1, string2, i - 1, j - 1) + 0 // No cuento esta iteración al ser iguales, por ende es recurrente
+        )
+    } else {
+        return min(
+            transformar(string1, string2, i - 1, j) + 1, // elimino izquierdo
+            transformar(string1, string2, i, j - 1) + 1, // elimino derecho
+            transformar(string1, string2, i - 1, j - 1) + 1, // modifico cualquiera de los dos
+        )
+    }
+}
+
+// No tiene sentido hacer una modificación si son iguales ya que no afecta al resto del string. Por ende, mergeo los casos
+
+fun transformar(string1, string2, i, j) {
+    if(i == 0) return unoSiCeroSino(string1[i] == string2[j]) + j; // Agrego el resto ya que si string1.length > string2.length, necesito j eliminaciones 
+    if(j == 0) return unoSiCeroSino(string1[i] == string2[j]) + i; // Agrego el resto ya que si string2.length > string1.length, necesito i eliminaciones 
+    val letra1 = string1[i] 
+    val letra2 = string2[j]
+    return min(
+        transformar(string1, string2, i - 1, j) + 1, // elimino izquierdo
+        transformar(string1, string2, i, j - 1) + 1, // elimino derecho
+        transformar(string1, string2, i - 1, j - 1) + unoSiCeroSino(letra1 == letra2), // modifico cualquiera de los dos
+    )
+}
+
+fun unoSiCeroSino(si) {
+    if(si) return 1 else return 0
+}
+
+// Bottom up DP
+// Uso una matriz donde xi = string2[i - 1] y yi = string1[i - 1]
+
+fun transformar(string1, string2) {
+    val width = string2.length + 1
+    val height = string1.length + 1
+    val matriz = Matriz(width, height)
+    for(i in range(0 until width)) {
+        matriz[i, 0] = i // Inicio los casos base en sub i ya que matriz[i, 0] necesita i eliminaciones para ser igual al substring.
+    }
+    for(j in range(0 until height)) {
+        matriz[0, j] = j  // Inicio los casos base en sub j ya que matriz[0, j] necesita j eliminaciones para ser igual al substring.
+    }
+    for(i in range(1 until width)) {
+        for(j in range(1 until height)) {
+            matriz[i, j] = min(
+                matriz[i - 1, j] + 1,
+                matriz[i, j - 1] + 1,
+                matriz[i - 1, j - 1] + unoSiCeroSino(string1[i - 1] === string2[j - 1])
+            ) 
+        }
+    }
+
+}
